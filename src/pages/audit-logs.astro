@@ -1,0 +1,69 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import "../styles/audit-logs.css";
+const pageTitle = "Audit Logs";
+---
+<BaseLayout title={pageTitle} indexOfNav={3}>
+	<main>
+		<section aria-labelledby="audit-title">
+			<header>
+				<p class="audit-kicker">Traceability of recommendation</p>
+				<h1 id="audit-title">Audit Logs</h1>
+				<p class="audit-lead">Traceability of recommendation</p>
+			</header>
+			<div>
+				<button type="button" class="audit-button--primary">Generate Recommendation</button>
+				<button type="button" class="audit-button--primary">Refresh</button>
+			</div>
+		</section>
+
+		<section id="audit-data">
+			<header>
+				<div>
+					<h2 id="recent-runs-title">RECENT RUNS</h2>
+				</div>
+				<div>
+					<button type="button" class="audit-button--primary">Generate new recommendation</button>
+					<button type="button" class="audit-button--danger">Clear Logs</button>
+				</div>
+			</header>
+
+			<article aria-labelledby="recent-runs-table-title">
+				<header>
+					<h3 id="recent-runs-table-title">Audit Logs</h3>
+				</header>
+
+				<table class="audit-table">
+					<thead>
+						<tr>
+							<th scope="col">Time</th>
+							<th scope="col">Severity</th>
+							<th scope="col">Action</th>
+							<th scope="col">Trace ID</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>08:42</td>
+							<td><span class="severity severity--info">Info</span></td>
+							<td>Recommendation generated</td>
+							<td>TRC-2419-AX</td>
+						</tr>
+						<tr>
+							<td>08:31</td>
+							<td><span class="severity severity--warn">Warn</span></td>
+							<td>Signal threshold exceeded</td>
+							<td>TRC-2408-KM</td>
+						</tr>
+						<tr>
+							<td>08:09</td>
+							<td><span class="severity severity--low">Low</span></td>
+							<td>Audit log archived</td>
+							<td>TRC-2388-QD</td>
+						</tr>
+					</tbody>
+				</table>
+			</article>
+		</section>
+	</main>
+</BaseLayout>

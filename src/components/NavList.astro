@@ -1,0 +1,27 @@
+---
+interface Props {
+	indexOfNav: number;
+}
+const { indexOfNav } = Astro.props;
+const pathname = new URL(Astro.url).pathname;
+const listItems = [
+	{ url: "/", title: "Dashboard" },
+	{ url: "/operations", title: "Operations" },
+	{ url: "/intelligence", title: "Intelligence" },
+	{ url: "/audit-logs", title: "Audit Logs" },
+];
+---
+<nav>
+	<ul class="nav-list">
+		{listItems.map((item) => { 
+		const isActive = pathname === item.url;
+		return (
+		<li class:list={{ active : isActive }}>
+          <a href={item.url} aria-current={isActive? "page" : undefined}>
+            {item.title}
+          </a>
+        </li>
+		);
+	})}
+	</ul>
+</nav>

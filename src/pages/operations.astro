@@ -1,0 +1,99 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import "../styles/operations.css";
+const pageTitle = "Operations";
+---
+<BaseLayout title={pageTitle} indexOfNav={1}>
+	<main>
+		<section aria-labelledby="main-title">
+			<header>
+				<p class="operations-kicker">Operations Control</p>
+				<h1 id="main-title">Operations</h1>
+				<p class="operations-lead">Hubs, capacity, dispatch plan, recommendations</p>
+			</header>
+			<div>
+				<button>Generate Recommendation</button>
+				<button>Refresh</button>
+			</div>
+		</section>
+
+		<section id="operations-data">
+			<header>
+				<h2>Hub Snapshot</h2>
+				<div class="operations-stats">
+					<div class="operations-stat">
+						<span>Active hubs</span>
+						<strong>2</strong>
+					</div>
+					<div class="operations-stat">
+						<span>Average utilization</span>
+						<strong><span class="good">73%</span></strong>
+					</div>
+				</div>
+			</header>
+			<article aria-labelledby="volume-capacity-title">
+				<header>
+					<h3 id="volume-capacity-title">Volume and Capacity</h3>
+				</header>
+
+				<table class="operations-table"> <thead>
+						<tr>
+							<th scope="col">Hub</th>
+							<th scope="col">Packages(24hr)</th>
+							<th scope="col">Trucks</th>
+							<th scope="col">Utilization</th>
+							<th scope="col">Notes</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Hub A</td>
+							<td>1200</td>
+							<td>18</td>
+							<td><span class="good">82%</span></td>
+							<td>Normal load</td>
+						</tr>
+						<tr>
+							<td>Hub B</td>
+							<td>860</td>
+							<td>12</td>
+							<td><span class="warn">64%</span></td>
+							<td>Under capacity</td>
+						</tr>
+					</tbody>
+				</table>
+			</article>
+
+			<header>
+					<h2>Dispatch Plan</h2>
+			</header>
+
+			<article aria-labelledby="today-corridor-title">
+				<header>
+					<h3 id="today-corridor-title">Today's Corridor</h3>
+				</header>
+
+				<table class="operations-table">
+					<thead>
+						<tr>
+							<th scope="col">Corridor</th>
+							<th scope="col">Route Pattern</th>
+							<th scope="col">Mode</th>
+							<th scope="col">Objective</th>
+							<th scope="col">Risk</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Northern</td>
+							<td>Kuala Lumpur → Perak → Penang</td>
+							<td><span class="info">Consolidate</span></td>
+							<td>Clear volume with fewer cycles</td>
+							<td><span class="good">Low</span></td>
+						</tr>
+					</tbody>
+				</table>
+			</article>
+		</section>
+	</main>
+</BaseLayout>

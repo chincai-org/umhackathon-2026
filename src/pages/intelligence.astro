@@ -1,0 +1,66 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import "../styles/intelligence.css";
+const pageTitle = "Intelligence";
+---
+<BaseLayout title={pageTitle} indexOfNav={2}>
+	<main>
+		<section aria-labelledby="intelligence-title">
+			<header>
+				<p class="intelligence-kicker">External signals</p>
+				<h1 id="intelligence-title">Intelligence</h1>
+				<p class="intelligence-lead">External signals, risk markers, and market context</p>
+			</header>
+			<div>
+				<button type="button">Generate Recommendation</button>
+				<button type="button">Refresh</button>
+			</div>
+		</section>
+
+		<section class="intelligence-summary" aria-label="Market summary">
+			<article>
+				<p class="intelligence-kicker">Diesel (RM/L)</p>
+				<strong class="intelligence-value">RM2.33 / L</strong>
+				<p class="intelligence-note">Latest price signal</p>
+			</article>
+
+			<article>
+				<p class="intelligence-kicker">Top risk</p>
+				<strong class="intelligence-value">Weather</strong>
+				<p class="intelligence-note">Monitor East Coast disruptions</p>
+			</article>
+		</section>
+
+		<section aria-labelledby="signals-title">
+			<header>
+				<h2 id="signals-title">Signals</h2>
+			</header>
+
+			<div class="signal-grid">
+				<article>
+					<h3>Fuel pricing trend</h3>
+					<p class="signal-description">Cost pressure increasing</p>
+					<p class="signal-story">Diesel has held above the previous weekly baseline, which may affect route cost planning over the next cycle.</p>
+				</article>
+
+				<article>
+					<h3>Weather watch</h3>
+					<p class="signal-description">East coast rainfall</p>
+					<p class="signal-story">Intermittent heavy rain is expected to slow delivery windows and raise congestion on key trunk roads.</p>
+				</article>
+
+				<article>
+					<h3>Port congestion</h3>
+					<p class="signal-description">Inbound delays visible</p>
+					<p class="signal-story">Dockside turnaround has slipped again, so replenishment timing should stay conservative for the next dispatch window.</p>
+				</article>
+
+				<article>
+					<h3>Demand shift</h3>
+					<p class="signal-description">Weekend volume lift</p>
+					<p class="signal-story">Retail demand is trending upward into the weekend, especially in urban drop zones with late cut-off orders.</p>
+				</article>
+			</div>
+		</section>
+	</main>
+</BaseLayout>
