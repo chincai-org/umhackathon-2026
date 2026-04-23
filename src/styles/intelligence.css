@@ -87,8 +87,9 @@
 	}
 
 	main {
-		display: grid;
-		grid-template-rows: 10rem 1fr;
+		display: flex;
+		flex-direction: column;
+		/* grid-template-rows: minmax(11rem, auto) 1fr; */
 		gap: 1.5rem;
 		padding: 1rem;
 	}

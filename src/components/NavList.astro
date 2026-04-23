@@ -14,6 +14,7 @@ const listItems = [
 <nav>
 	<ul class="nav-list">
 		{listItems.map((item) => { 
+		const normalizedUrl = item.url.replace(/\/$/, '') || '/';
 		const isActive = pathname === item.url;
 		return (
 		<li class:list={{ active : isActive }}>
