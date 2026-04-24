@@ -3,7 +3,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import "../styles/intelligence.css";
 import { getDieselSignal } from "../lib/fuelprice";
 const pageTitle = "Intelligence";
-const { dieselLabel, dieselNote } = await getDieselSignal();
+const { dieselLabel, dieselNote, dieselCaret, dieselHoverNote } =
+	await getDieselSignal();
 ---
 <BaseLayout title={pageTitle} indexOfNav={2}>
 	<main>
@@ -22,7 +23,12 @@ const { dieselLabel, dieselNote } = await getDieselSignal();
 		<section class="intelligence-summary" aria-label="Market summary">
 			<article>
 				<p class="intelligence-kicker">Diesel (RM/L)</p>
-				<strong class="intelligence-value">{dieselLabel}</strong>
+				<strong class="intelligence-value">
+					{dieselLabel}
+					<span class="diesel-caret" data-tooltip={dieselHoverNote} tabindex="0">
+						{dieselCaret}
+					</span>
+				</strong>
 				<p class="intelligence-note">{dieselNote}</p>
 			</article>
 

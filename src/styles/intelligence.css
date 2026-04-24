@@ -107,6 +107,44 @@
 		margin: 0;
 		color: rgba(255, 255, 255, 0.78);
 	}
+
+	.diesel-caret {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		margin-left: 0.35rem;
+		padding: 0.1rem 0.35rem;
+		border-radius: 0.45rem;
+		background: rgba(255, 255, 255, 0.08);
+		font-size: 0.9em;
+		cursor: help;
+	}
+
+	.diesel-caret::after {
+		content: attr(data-tooltip);
+		position: absolute;
+		left: 50%;
+		bottom: calc(100% + 0.45rem);
+		transform: translateX(-50%);
+		opacity: 0;
+		pointer-events: none;
+		white-space: nowrap;
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: #f8fafc;
+		background: rgba(15, 23, 42, 0.95);
+		border: 1px solid rgba(148, 163, 184, 0.35);
+		padding: 0.35rem 0.55rem;
+		border-radius: 0.45rem;
+		transition: opacity 120ms ease;
+		z-index: 5;
+	}
+
+	.diesel-caret:hover::after,
+	.diesel-caret:focus-visible::after {
+		opacity: 1;
+	}
 }
 
 @layer components {
