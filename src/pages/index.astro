@@ -1,9 +1,92 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import "../styles/dashboard.css";
 const pageTitle = "Dashboard";
 ---
 <BaseLayout title={pageTitle} indexOfNav={0}>
 	<main>
-		Dashboard
+		<section aria-labelledby="dashboard-title">
+			<header>
+				<p class="dashboard-kicker">Command center</p>
+				<h1 id="dashboard-title">Dashboard</h1>
+				<p class="dashboard-lead">General overview, system health, and shortcuts into each specialist area.</p>
+			</header>
+			<div>
+				<button type="button">Generate Recommendation</button>
+				<button type="button">Refresh</button>
+			</div>
+		</section>
+
+		<section class="dashboard-summary" aria-label="Overview metrics">
+			<article>
+				<p class="dashboard-kicker">Active modules</p>
+				<strong class="dashboard-value">3 of 4</strong>
+				<p class="dashboard-note">Operations, Intelligence, and Audit Logs are online.</p>
+			</article>
+
+			<article>
+				<p class="dashboard-kicker">Recommendation status</p>
+				<strong class="dashboard-value"><span class="good">Ready</span></strong>
+				<p class="dashboard-note">Latest analysis completed successfully.</p>
+			</article>
+
+			<article>
+				<p class="dashboard-kicker">System load</p>
+				<strong class="dashboard-value">72%</strong>
+				<p class="dashboard-note">Stable throughput across the current window.</p>
+			</article>
+		</section>
+
+		<section aria-labelledby="modules-title">
+			<header>
+				<h2 id="modules-title">Specialist Modules</h2>
+			</header>
+
+			<div class="dashboard-grid">
+				<article>
+					<h3>Operations</h3>
+					<p class="dashboard-description">Capacity, dispatch plans, and hub-level execution.</p>
+					<p class="dashboard-story">Use this area to inspect route pressure, stock balance, and operational recommendations.</p>
+					<a href="/operations">Open Operations</a>
+				</article>
+
+				<article>
+					<h3>Intelligence</h3>
+					<p class="dashboard-description">External signals and risk context.</p>
+					<p class="dashboard-story">Review market, weather, and pricing signals before issuing a recommendation.</p>
+					<a href="/intelligence">Open Intelligence</a>
+				</article>
+
+				<article>
+					<h3>Audit Logs</h3>
+					<p class="dashboard-description">Traceability and run history.</p>
+					<p class="dashboard-story">Track every generated recommendation and inspect recent changes.</p>
+					<a href="/audit-logs">Open Audit Logs</a>
+				</article>
+			</div>
+		</section>
+
+		<section aria-labelledby="activity-title">
+			<header>
+				<h2 id="activity-title">Recent Activity</h2>
+			</header>
+
+			<article class="dashboard-panel">
+				<ul class="dashboard-activity">
+					<li>
+						<span class="dashboard-time">08:42</span>
+						<span>Recommendation generated for the current dispatch window.</span>
+					</li>
+					<li>
+						<span class="dashboard-time">08:31</span>
+						<span>Weather and fuel signals refreshed from Intelligence.</span>
+					</li>
+					<li>
+						<span class="dashboard-time">08:09</span>
+						<span>Audit trail archived from the previous cycle.</span>
+					</li>
+				</ul>
+			</article>
+		</section>
 	</main>
 </BaseLayout>   
