@@ -12,11 +12,8 @@ const pageTitle = "Intelligence";
 				<p class="intelligence-lead">External signals, risk markers, and market context</p>
 			</header>
 			<div>
-				<form method="get" action="/" class="action-form">
-					<input type="hidden" name="generate" value="1" />
-					<button type="submit">Generate Recommendation</button>
-				</form>
-				<button type="button">Refresh</button>
+				<button type="button" id="generate-recommendation-btn">Generate Recommendation</button>
+				<button type="button" id="refresh-intelligence-btn">Refresh</button>
 			</div>
 		</section>
 
@@ -74,4 +71,17 @@ const pageTitle = "Intelligence";
 			</div>
 		</section>
 	</main>
+
+	<script is:inline>
+		document
+			.getElementById("generate-recommendation-btn")
+			?.addEventListener("click", () => {
+				window.location.href = "/?generate=1";
+			});
+		document
+			.getElementById("refresh-intelligence-btn")
+			?.addEventListener("click", () => {
+				window.location.reload();
+			});
+	</script>
 </BaseLayout>

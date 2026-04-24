@@ -265,7 +265,12 @@ const averageUtilization = 73;
 		}
 
 		generateBtn?.addEventListener("click", generateRecommendation);
-		refreshBtn?.addEventListener("click", () => window.location.reload());
+		
+		refreshBtn?.addEventListener("click", () => {
+    		const currentUrl = new URL(window.location.href);
+    		currentUrl.searchParams.set("generate", "0");
+    		window.location.href = currentUrl.toString();
+		});
 
 		if (shouldAutoGenerate) {
 			generateRecommendation();

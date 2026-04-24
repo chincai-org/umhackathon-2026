@@ -12,11 +12,8 @@ const pageTitle = "Operations";
 				<p class="operations-lead">Hubs, capacity, dispatch plan, recommendations</p>
 			</header>
 			<div>
-				<form method="get" action="/" class="action-form">
-					<input type="hidden" name="generate" value="1" />
-					<button type="submit">Generate Recommendation</button>
-				</form>
-				<button>Refresh</button>
+				<button type="button" id="generate-recommendation-btn">Generate Recommendation</button>
+				<button type="button" id="refresh-operations-btn">Refresh</button>
 			</div>
 		</section>
 
@@ -99,4 +96,17 @@ const pageTitle = "Operations";
 			</article>
 		</section>
 	</main>
+
+	<script is:inline>
+		document
+			.getElementById("generate-recommendation-btn")
+			?.addEventListener("click", () => {
+				window.location.href = "/?generate=1";
+			});
+		document
+			.getElementById("refresh-operations-btn")
+			?.addEventListener("click", () => {
+				window.location.reload();
+			});
+	</script>
 </BaseLayout>
