@@ -15,7 +15,7 @@ const averageUtilization = 73;
 			</header>
 			<div>
 				<button type="button" id="generate-recommendation-btn">Generate Recommendation</button>
-				<button type="button" id="refresh-dashboard-btn">Refresh</button>
+				<button type="button" id="refresh-dashboard-btn" onclick="window.location.href='/'">Refresh</button>
 			</div>
 		</section>
 
@@ -135,7 +135,6 @@ const averageUtilization = 73;
 		];
 
 		const generateBtn = document.getElementById("generate-recommendation-btn");
-		const refreshBtn = document.getElementById("refresh-dashboard-btn");
 		const statusEl = document.getElementById("recommendation-status");
 		const statusNoteEl = document.getElementById("recommendation-status-note");
 		const hintEl = document.getElementById("ai-hint");
@@ -265,12 +264,6 @@ const averageUtilization = 73;
 		}
 
 		generateBtn?.addEventListener("click", generateRecommendation);
-		
-		refreshBtn?.addEventListener("click", () => {
-    		const currentUrl = new URL(window.location.href);
-    		currentUrl.searchParams.set("generate", "0");
-    		window.location.href = currentUrl.toString();
-		});
 
 		if (shouldAutoGenerate) {
 			generateRecommendation();
