@@ -3,6 +3,7 @@ const FUELPRICE_URL = "https://api.data.gov.my/data-catalogue?id=fuelprice";
 type FuelPriceRow = {
     date: string;
     diesel: number | null;
+    series_type?: "level" | "change_weekly" | string;
 };
 
 export async function getDieselSignal(): Promise<{
@@ -18,19 +19,22 @@ export async function getDieselSignal(): Promise<{
         }
 
         const rows = (await response.json()) as FuelPriceRow[];
-        const sortedRows = rows
+        const validRows = rows
             .filter(
                 (row) =>
                     row?.date &&
                     row?.diesel !== null &&
                     row?.diesel !== undefined &&
                     !Number.isNaN(new Date(row.date).getTime()),
-            )
-            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-        const latest = sortedRows[0];
-        const previous = sortedRows[1];
+            );
+        const latestLevel = validRows
+            .filter((row) => row.series_type === "level")
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
+        const latestWeeklyChange = validRows
+            .filter((row) => row.series_type === "change_weekly")
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
 
-        if (!latest) {
+        if (!latestLevel) {
             return {
                 dieselLabel: "N/A",
                 dieselNote: "Latest price signal unavailable",
@@ -38,22 +42,25 @@ export async function getDieselSignal(): Promise<{
                 dieselHoverNote: "No diesel trend data",
             };
         }
-
-        const delta =
-            previous && previous.diesel !== null
-                ? latest.diesel! - previous.diesel
-                : null;
-        const dieselCaret = delta === null ? "?" : delta > 0 ? "^" : delta < 0 ? "v" : "-";
+        const weeklyDelta = latestWeeklyChange?.diesel ?? null;
+        const dieselCaret =
+            weeklyDelta === null
+                ? "?"
+                : weeklyDelta > 0
+                  ? "^"
+                  : weeklyDelta < 0
+                    ? "v"
+                    : "-";
         const changeText =
-            delta === null
-                ? "No previous daily point"
-                : `${delta > 0 ? "+" : ""}${delta.toFixed(2)} vs ${previous!.date}`;
+            weeklyDelta === null
+                ? "No weekly change point"
+                : `${weeklyDelta > 0 ? "+" : ""}${weeklyDelta.toFixed(2)} (week-on-week)`;
 
         return {
-            dieselLabel: `RM${latest.diesel!.toFixed(2)} / L`,
-            dieselNote: `Latest update: ${latest.date}`,
+            dieselLabel: `RM${latestLevel.diesel!.toFixed(2)} / L`,
+            dieselNote: `Latest update: ${latestLevel.date}`,
             dieselCaret,
-            dieselHoverNote: `Daily change: ${changeText}`,
+            dieselHoverNote: `Diesel change: ${changeText}`,
         };
     } catch (error) {
         return {
