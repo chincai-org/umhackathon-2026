@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DieselSignal from "../components/DieselSignal.astro";
+import WeatherSignal from "../components/WeatherSignal.astro";
 import "../styles/intelligence.css";
 const pageTitle = "Intelligence";
 ---
@@ -30,9 +31,21 @@ const pageTitle = "Intelligence";
 			</article>
 
 			<article>
-				<p class="intelligence-kicker">Top risk</p>
-				<strong class="intelligence-value">Weather</strong>
-				<p class="intelligence-note">Monitor East Coast disruptions</p>
+			  <p class="intelligence-kicker">Weather</p>
+			  <WeatherSignal server:defer>
+			  <div slot="fallback" class="zone-grid">
+			    {["West Coast", "North", "East Coast", "East Malaysia"].map((name) => (
+			      <article class="zone-card loading">
+			        <h3>{name}</h3>
+
+			        <div class="skeleton-line"></div>
+			        <div class="skeleton-line short"></div>
+
+			        <p class="zone-risk">Loading weather data...</p>
+			      </article>
+			    ))}
+			  </div>
+			</WeatherSignal>
 			</article>
 		</section>
 

@@ -1,0 +1,31 @@
+---
+import { getRegionalWeatherSafe } from "../lib/weather";
+
+const zones = await getRegionalWeatherSafe();
+---
+
+<div class="zone-grid">
+  {Object.entries(zones).map(([key, zone]) => (
+    <article class={`zone-card risk-${zone.risk.toLowerCase()}`}>
+      <h3>{zone.name}</h3>
+
+      <!-- 🌡 temperature -->
+      <strong class="zone-value">{zone.label}</strong>
+
+      <!-- 🌦 condition (THIS is Step 3) -->
+      <p class="zone-condition">{zone.condition}</p>
+
+      <!-- ⚠ risk message -->
+      <p class="zone-risk">
+        {zone.risk === "HIGH" && "⚠ High disruption risk"}
+        {zone.risk === "MEDIUM" && "⚡ Moderate risk"}
+        {zone.risk === "LOW" && "✓ Stable conditions"}
+        {zone.risk === "UNKNOWN" && "No data available"}
+      </p>
+
+      {zone.error && (
+        <p class="zone-error">⚠ {zone.error}</p>
+      )}
+    </article>
+  ))}
+</div>
