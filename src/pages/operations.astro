@@ -13,7 +13,7 @@ const pageTitle = "Operations";
 			</header>
 			<div>
 				<button type="button" id="generate-recommendation-btn">Generate Recommendation</button>
-				<button type="button" id="refresh-operations-btn">Refresh</button>
+				<button type="button" id="refresh-operations-btn" onclick="window.location.reload()">Refresh</button>
 			</div>
 		</section>
 
@@ -102,11 +102,6 @@ const pageTitle = "Operations";
 			.getElementById("generate-recommendation-btn")
 			?.addEventListener("click", () => {
 				window.location.href = "/?generate=1";
-			});
-		document
-			.getElementById("refresh-operations-btn")
-			?.addEventListener("click", () => {
-				window.location.reload();
 			});
 	</script>
 </BaseLayout>

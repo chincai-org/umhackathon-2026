@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { z } from "zod";
 import { getDieselSignal } from "../../lib/fuelprice";
 
 type RecommendationPayload = {
@@ -12,7 +13,11 @@ type RecommendationPayload = {
 };
 
 function parseAiJson(content: string): RecommendationPayload | null {
-	const cleaned = content.trim().replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
+	const cleaned = content
+		.trim()
+		.replace(/^```(?:json)?/i, "")
+		.replace(/```$/, "")
+		.trim();
 	try {
 		return JSON.parse(cleaned) as RecommendationPayload;
 	} catch {
@@ -23,23 +28,48 @@ function parseAiJson(content: string): RecommendationPayload | null {
 export const POST: APIRoute = async () => {
 	const apiKey = String(import.meta.env.ILMU_API_KEY ?? "").trim();
 	if (!apiKey) {
-		return new Response(JSON.stringify({ ok: false, error: "Missing ILMU_API_KEY in .env" }), { status: 500 });
+		return new Response(
+			JSON.stringify({
+				ok: false,
+				error: "Missing ILMU_API_KEY in .env",
+			}),
+			{ status: 500 },
+		);
 	}
 
 	try {
-		const { dieselLabel, dieselNote, dieselHoverNote } = await getDieselSignal();
+		const { dieselLabel, dieselNote, dieselHoverNote } =
+			await getDieselSignal();
 		const hubSnapshot = [
-			{ hub: "Hub A", packages24h: 1200, trucks: 18, utilization: 82, note: "Normal load" },
-			{ hub: "Hub B", packages24h: 860, trucks: 12, utilization: 64, note: "Under capacity" },
+			{
+				hub: "Hub A",
+				packages24h: 1200,
+				trucks: 18,
+				utilization: 82,
+				note: "Normal load",
+			},
+			{
+				hub: "Hub B",
+				packages24h: 860,
+				trucks: 12,
+				utilization: 64,
+				note: "Under capacity",
+			},
 		];
 		const averageUtilization = Math.round(
-			hubSnapshot.reduce((total, hub) => total + hub.utilization, 0) / hubSnapshot.length,
+			hubSnapshot.reduce((total, hub) => total + hub.utilization, 0) /
+				hubSnapshot.length,
 		);
 
 		// INSERT DATA HERE
 		const fusedContext = {
-			fuel: { price: dieselLabel, note: dieselNote, trend: dieselHoverNote },
-			weather: "East coast rainfall likely to delay several delivery windows.",
+			fuel: {
+				price: dieselLabel,
+				note: dieselNote,
+				trend: dieselHoverNote,
+			},
+			weather:
+				"East coast rainfall likely to delay several delivery windows.",
 			signals: [
 				"Fuel pricing trend indicates elevated cost pressure.",
 				"Port congestion still visible on inbound replenishment.",
@@ -47,7 +77,12 @@ export const POST: APIRoute = async () => {
 			],
 			hubs: hubSnapshot,
 			truckAllocation: "Hub A: 18 trucks, Hub B: 12 trucks",
-			utilization: { average: `${averageUtilization}%`, byHub: hubSnapshot.map((hub) => `${hub.hub}: ${hub.utilization}%`) },
+			utilization: {
+				average: `${averageUtilization}%`,
+				byHub: hubSnapshot.map(
+					(hub) => `${hub.hub}: ${hub.utilization}%`,
+				),
+			},
 		};
 
 		const requestPayload = {
@@ -94,7 +129,9 @@ export const POST: APIRoute = async () => {
 					const providerMessage =
 						data?.error?.message ??
 						data?.message ??
-						(rawText ? rawText.slice(0, 250) : "No provider error body");
+						(rawText
+							? rawText.slice(0, 250)
+							: "No provider error body");
 
 					if (response.status === 401) {
 						throw new Error(
@@ -106,14 +143,18 @@ export const POST: APIRoute = async () => {
 							`AI API HTTP 504 (${attemptLabel}): Provider gateway timed out before model completion. ${providerMessage}`,
 						);
 					}
-					throw new Error(`AI API HTTP ${response.status} (${attemptLabel}): ${providerMessage}`);
+					throw new Error(
+						`AI API HTTP ${response.status} (${attemptLabel}): ${providerMessage}`,
+					);
 				}
 
 				return data;
 			} catch (error) {
 				console.log("[Z.AI] Error", error);
 				if (error instanceof Error && error.name === "AbortError") {
-					throw new Error(`AI request timeout (${attemptLabel}): no response in 100s`);
+					throw new Error(
+						`AI request timeout (${attemptLabel}): no response in 100s`,
+					);
 				}
 				throw error;
 			} finally {
@@ -137,7 +178,8 @@ export const POST: APIRoute = async () => {
 						title: "AI response",
 						severity: "Medium",
 						naturalLanguageRecommendation: aiRawText,
-						logicalRationale: "Provider returned plain text instead of structured JSON.",
+						logicalRationale:
+							"Provider returned plain text instead of structured JSON.",
 						tradeoffAnalysis: "N/A",
 						routingOptimization: "N/A",
 						resourceAllocation: [],
@@ -148,14 +190,20 @@ export const POST: APIRoute = async () => {
 			);
 		}
 
-		return new Response(JSON.stringify({ ok: true, result: parsed, raw: aiRawText }), {
-			status: 200,
-		});
+		return new Response(
+			JSON.stringify({ ok: true, result: parsed, raw: aiRawText }),
+			{
+				status: 200,
+			},
+		);
 	} catch (error) {
 		return new Response(
 			JSON.stringify({
 				ok: false,
-				error: error instanceof Error ? error.message : "Failed to generate recommendation",
+				error:
+					error instanceof Error
+						? error.message
+						: "Failed to generate recommendation",
 			}),
 			{ status: 500 },
 		);

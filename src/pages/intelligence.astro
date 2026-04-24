@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import DieselSignal from "../components/DieselSignal.astro";
 import "../styles/intelligence.css";
 const pageTitle = "Intelligence";
 ---
@@ -13,23 +14,19 @@ const pageTitle = "Intelligence";
 			</header>
 			<div>
 				<button type="button" id="generate-recommendation-btn">Generate Recommendation</button>
-				<button type="button" id="refresh-intelligence-btn">Refresh</button>
+				<button type="button" id="refresh-intelligence-btn" onclick="window.location.reload()">Refresh</button>
 			</div>
 		</section>
 
 		<section class="intelligence-summary" aria-label="Market summary">
 			<article>
 				<p class="intelligence-kicker">Diesel (RM/L)</p>
-				<div
-					id="diesel-signal"
-					hx-get="/intelligence/diesel-signal"
-					hx-trigger="load"
-					hx-swap="outerHTML"
-					aria-busy="true"
-				>
-					<strong class="intelligence-value">Loading...</strong>
-					<p class="intelligence-note">Fetching latest diesel signal</p>
-				</div>
+				<DieselSignal server:defer>
+					<div slot="fallback" id="diesel-signal" aria-busy="true">
+						<strong class="intelligence-value">Loading...</strong>
+						<p class="intelligence-note">Fetching latest diesel signal</p>
+					</div>
+				</DieselSignal>
 			</article>
 
 			<article>
@@ -71,17 +68,11 @@ const pageTitle = "Intelligence";
 			</div>
 		</section>
 	</main>
-
 	<script is:inline>
 		document
 			.getElementById("generate-recommendation-btn")
 			?.addEventListener("click", () => {
 				window.location.href = "/?generate=1";
-			});
-		document
-			.getElementById("refresh-intelligence-btn")
-			?.addEventListener("click", () => {
-				window.location.reload();
 			});
 	</script>
 </BaseLayout>

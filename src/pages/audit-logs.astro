@@ -13,7 +13,8 @@ const pageTitle = "Audit Logs";
 			</header>
 			<div>
 				<button type="button" class="audit-button--primary" id="generate-recommendation-btn">Generate Recommendation</button>
-				<button type="button" class="audit-button--primary" id="refresh-audit-btn">Refresh</button>
+				<button type="button" 
+					class="audit-button--primary" id="refresh-audit-btn" onclick="window.location.reload()">Refresh</button>
 			</div>
 		</section>
 
@@ -77,10 +78,5 @@ const pageTitle = "Audit Logs";
 		document
 			.getElementById("generate-new-recommendation-btn")
 			?.addEventListener("click", goToDashboardGenerate);
-		document
-			.getElementById("refresh-audit-btn")
-			?.addEventListener("click", () => {
-				window.location.reload();
-			});
 	</script>
 </BaseLayout>

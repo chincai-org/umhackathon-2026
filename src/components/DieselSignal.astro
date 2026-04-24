@@ -1,9 +1,7 @@
 ---
-import { getDieselSignal } from "../../lib/fuelprice";
+import { getDieselSignal } from "../lib/fuelprice";
 
-const { dieselLabel, dieselNote, dieselCaret, dieselHoverNote } =
-	await getDieselSignal();
-export const partial = true;
+const { dieselLabel, dieselNote, dieselCaret, dieselHoverNote } = await getDieselSignal();
 ---
 
 <div id="diesel-signal" aria-busy="false">
