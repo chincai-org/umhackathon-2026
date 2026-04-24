@@ -108,6 +108,14 @@
 		color: rgba(255, 255, 255, 0.78);
 	}
 
+	#diesel-signal[aria-busy="true"] {
+		opacity: 0.82;
+	}
+
+	#diesel-signal[aria-busy="true"] .intelligence-value {
+		color: rgba(255, 255, 255, 0.68);
+	}
+
 	.diesel-caret {
 		position: relative;
 		display: inline-flex;

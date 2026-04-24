@@ -1,12 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import "../styles/intelligence.css";
-import { getDieselSignal } from "../lib/fuelprice";
 const pageTitle = "Intelligence";
-const { dieselLabel, dieselNote, dieselCaret, dieselHoverNote } =
-	await getDieselSignal();
 ---
-<BaseLayout title={pageTitle} indexOfNav={2}>
+<BaseLayout title={pageTitle}>
 	<main>
 		<section aria-labelledby="intelligence-title">
 			<header>
@@ -23,13 +20,16 @@ const { dieselLabel, dieselNote, dieselCaret, dieselHoverNote } =
 		<section class="intelligence-summary" aria-label="Market summary">
 			<article>
 				<p class="intelligence-kicker">Diesel (RM/L)</p>
-				<strong class="intelligence-value">
-					{dieselLabel}
-					<span class="diesel-caret" data-tooltip={dieselHoverNote} tabindex="0">
-						{dieselCaret}
-					</span>
-				</strong>
-				<p class="intelligence-note">{dieselNote}</p>
+				<div
+					id="diesel-signal"
+					hx-get="/intelligence/diesel-signal"
+					hx-trigger="load"
+					hx-swap="outerHTML"
+					aria-busy="true"
+				>
+					<strong class="intelligence-value">Loading...</strong>
+					<p class="intelligence-note">Fetching latest diesel signal</p>
+				</div>
 			</article>
 
 			<article>

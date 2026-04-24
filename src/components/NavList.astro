@@ -1,8 +1,4 @@
 ---
-interface Props {
-	indexOfNav: number;
-}
-const { indexOfNav } = Astro.props;
 const pathname = new URL(Astro.url).pathname;
 const listItems = [
 	{ url: "/", title: "Dashboard" },

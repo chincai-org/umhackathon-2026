@@ -1,0 +1,17 @@
+---
+import { getDieselSignal } from "../../lib/fuelprice";
+
+const { dieselLabel, dieselNote, dieselCaret, dieselHoverNote } =
+	await getDieselSignal();
+export const partial = true;
+---
+
+<div id="diesel-signal" aria-busy="false">
+	<strong class="intelligence-value">
+		{dieselLabel}
+		<span class="diesel-caret" data-tooltip={dieselHoverNote} tabindex="0">
+			{dieselCaret}
+		</span>
+	</strong>
+	<p class="intelligence-note">{dieselNote}</p>
+</div>

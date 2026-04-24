@@ -6,9 +6,8 @@ import NavList from "../components/NavList.astro";
 // Define the props this layout accepts
 interface Props {
 	title: string;
-	indexOfNav: number;
 }
-const { title, indexOfNav } = Astro.props;
+const { title } = Astro.props;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +18,7 @@ const { title, indexOfNav } = Astro.props;
 		<script src="https://cdn.jsdelivr.net/npm/htmx.org@4.0.0-beta2" integrity="sha384-v+EMKtNUAo5enmQxBqgoU/FWvVvvZHvITNzurHSl4kzvCs94wdlgHUci1lliKWKz" crossorigin="anonymous"></script>
 	</head>
 	<body>
-		<NavList indexOfNav={indexOfNav} />
+		<NavList />
 		<slot />
 	</body>
 </html>   
