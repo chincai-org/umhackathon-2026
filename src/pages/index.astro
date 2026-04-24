@@ -2,6 +2,8 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import "../styles/dashboard.css";
 const pageTitle = "Dashboard";
+const shouldAutoGenerate = Astro.url.searchParams.get("generate") === "1";
+const averageUtilization = 73;
 ---
 <BaseLayout title={pageTitle}>
 	<main>
@@ -9,31 +11,64 @@ const pageTitle = "Dashboard";
 			<header>
 				<p class="dashboard-kicker">Command center</p>
 				<h1 id="dashboard-title">Dashboard</h1>
-				<p class="dashboard-lead">General overview, system health, and shortcuts into each specialist area.</p>
+				<p class="dashboard-lead">Fused operational intelligence and AI-driven dispatch recommendations.</p>
 			</header>
 			<div>
-				<button type="button">Generate Recommendation</button>
-				<button type="button">Refresh</button>
+				<button type="button" id="generate-recommendation-btn">Generate Recommendation</button>
+				<button type="button" id="refresh-dashboard-btn">Refresh</button>
 			</div>
 		</section>
 
 		<section class="dashboard-summary" aria-label="Overview metrics">
 			<article>
 				<p class="dashboard-kicker">Active modules</p>
-				<strong class="dashboard-value">3 of 4</strong>
-				<p class="dashboard-note">Operations, Intelligence, and Audit Logs are online.</p>
+				<strong class="dashboard-value">4 of 4</strong>
+				<p class="dashboard-note">Dashboard, Operations, Intelligence, and Audit Logs are online.</p>
 			</article>
 
 			<article>
 				<p class="dashboard-kicker">Recommendation status</p>
-				<strong class="dashboard-value"><span class="good">Ready</span></strong>
-				<p class="dashboard-note">Latest analysis completed successfully.</p>
+				<strong class="dashboard-value"><span class={shouldAutoGenerate ? "info" : "good"} id="recommendation-status">{shouldAutoGenerate ? "Queued" : "Ready"}</span></strong>
+				<p class="dashboard-note" id="recommendation-status-note">{shouldAutoGenerate ? "AI generation queued from another module." : "Trigger generation to run AI trade-off analysis."}</p>
 			</article>
 
 			<article>
-				<p class="dashboard-kicker">System load</p>
-				<strong class="dashboard-value">72%</strong>
-				<p class="dashboard-note">Stable throughput across the current window.</p>
+				<p class="dashboard-kicker">Average utilization</p>
+				<strong class="dashboard-value">{averageUtilization}%</strong>
+				<p class="dashboard-note">Hub A and Hub B utilization combined.</p>
+			</article>
+		</section>
+
+		<section aria-labelledby="ai-recommendation-title">
+			<header>
+				<h2 id="ai-recommendation-title">Z.AI Recommendation Center</h2>
+			</header>
+			<article class="dashboard-panel">
+				<p><strong>Displaying prescriptive, natural-language recommendations with logical rationales for resource allocation.</strong></p>
+				<p><strong>Processing the fused data to perform complex trade-off analysis and routing optimizations.</strong></p>
+				<p class="dashboard-note" id="ai-hint">Press Generate Recommendation to run the AI workflow.</p>
+
+				<section id="ai-progress" class="ai-progress hidden" aria-live="polite">
+					<div class="ai-progress-meta">
+						<strong id="ai-progress-stage">Initializing...</strong>
+						<span id="ai-progress-percent">0%</span>
+					</div>
+					<div class="ai-progress-track">
+						<div class="ai-progress-bar" id="ai-progress-bar"></div>
+					</div>
+				</section>
+
+				<p id="ai-error" class="bad hidden"></p>
+
+				<section id="ai-result" class="hidden">
+					<p><strong>Title:</strong> <span id="ai-title"></span></p>
+					<p><strong>Severity:</strong> <span id="ai-severity"></span></p>
+					<p><strong>Recommendation:</strong> <span id="ai-recommendation"></span></p>
+					<p><strong>Logical rationale:</strong> <span id="ai-rationale"></span></p>
+					<p><strong>Trade-off analysis:</strong> <span id="ai-tradeoff"></span></p>
+					<p><strong>Routing optimization:</strong> <span id="ai-routing"></span></p>
+					<ul class="dashboard-activity" id="ai-resource-allocation"></ul>
+				</section>
 			</article>
 		</section>
 
@@ -75,18 +110,165 @@ const pageTitle = "Dashboard";
 				<ul class="dashboard-activity">
 					<li>
 						<span class="dashboard-time">08:42</span>
-						<span>Recommendation generated for the current dispatch window.</span>
+						<span>Z.AI generated prescriptive recommendations from fused data.</span>
 					</li>
 					<li>
 						<span class="dashboard-time">08:31</span>
-						<span>Weather and fuel signals refreshed from Intelligence.</span>
+						<span>Weather, fuel, and market signals synchronized from Intelligence.</span>
 					</li>
 					<li>
 						<span class="dashboard-time">08:09</span>
-						<span>Audit trail archived from the previous cycle.</span>
+						<span>Truck allocation and utilization metrics synced from Operations.</span>
 					</li>
 				</ul>
 			</article>
 		</section>
 	</main>
+
+	<script is:inline define:vars={{ shouldAutoGenerate }}>
+		const progressPlan = [
+			{ threshold: 15, label: "Collecting fuel, weather, and signal data..." },
+			{ threshold: 35, label: "Fusing hub utilization and truck allocation..." },
+			{ threshold: 65, label: "Running trade-off analysis..." },
+			{ threshold: 85, label: "Optimizing routes and drafting recommendation..." },
+			{ threshold: 95, label: "Finalizing AI response..." },
+		];
+
+		const generateBtn = document.getElementById("generate-recommendation-btn");
+		const refreshBtn = document.getElementById("refresh-dashboard-btn");
+		const statusEl = document.getElementById("recommendation-status");
+		const statusNoteEl = document.getElementById("recommendation-status-note");
+		const hintEl = document.getElementById("ai-hint");
+		const progressWrap = document.getElementById("ai-progress");
+		const progressStage = document.getElementById("ai-progress-stage");
+		const progressPercent = document.getElementById("ai-progress-percent");
+		const progressBar = document.getElementById("ai-progress-bar");
+		const errorEl = document.getElementById("ai-error");
+		const resultWrap = document.getElementById("ai-result");
+		const titleEl = document.getElementById("ai-title");
+		const severityEl = document.getElementById("ai-severity");
+		const recommendationEl = document.getElementById("ai-recommendation");
+		const rationaleEl = document.getElementById("ai-rationale");
+		const tradeoffEl = document.getElementById("ai-tradeoff");
+		const routingEl = document.getElementById("ai-routing");
+		const resourcesEl = document.getElementById("ai-resource-allocation");
+
+		let isRunning = false;
+		let progressValue = 0;
+		let progressTimer = null;
+
+		function normalizeResourceAllocation(input) {
+			if (Array.isArray(input)) return input.map((item) => String(item)).filter(Boolean);
+			if (typeof input === "string") {
+				return input.split(/\r?\n|;/g).map((item) => item.trim()).filter(Boolean);
+			}
+			if (input && typeof input === "object") {
+				return Object.entries(input).map(([key, value]) => `${key}: ${String(value)}`);
+			}
+			return [];
+		}
+
+		function updateProgressUi(value) {
+			progressValue = Math.max(0, Math.min(100, value));
+			progressPercent.textContent = `${progressValue}%`;
+			progressBar.style.width = `${progressValue}%`;
+			const stage = progressPlan.find((item) => progressValue <= item.threshold) ?? progressPlan[progressPlan.length - 1];
+			progressStage.textContent = stage.label;
+		}
+
+		function startProgress() {
+			progressWrap.classList.remove("hidden");
+			updateProgressUi(5);
+			progressTimer = window.setInterval(() => {
+				if (progressValue < 92) {
+					updateProgressUi(progressValue + 3);
+				}
+			}, 1500);
+		}
+
+		function stopProgress(finalValue) {
+			if (progressTimer) {
+				window.clearInterval(progressTimer);
+				progressTimer = null;
+			}
+			updateProgressUi(finalValue);
+		}
+
+		async function generateRecommendation() {
+			if (isRunning) return;
+			isRunning = true;
+			generateBtn.disabled = true;
+			errorEl.classList.add("hidden");
+			errorEl.textContent = "";
+			resultWrap.classList.add("hidden");
+			resourcesEl.innerHTML = "";
+			hintEl.classList.add("hidden");
+			statusEl.textContent = "Generating";
+			statusEl.className = "info";
+			statusNoteEl.textContent = "AI is processing fused dashboard data.";
+			startProgress();
+
+			try {
+				const response = await fetch("/api/recommendation", { method: "POST" });
+				const payload = await response.json();
+				if (!response.ok || !payload?.ok) {
+					throw new Error(payload?.error ?? `Request failed with ${response.status}`);
+				}
+
+				const data = payload.result;
+				titleEl.textContent = data.title ?? "-";
+				severityEl.textContent = data.severity ?? "-";
+				severityEl.className =
+					data.severity === "Critical" || data.severity === "High"
+						? "bad"
+						: data.severity === "Medium"
+							? "warn"
+							: "good";
+				recommendationEl.textContent = data.naturalLanguageRecommendation ?? "-";
+				rationaleEl.textContent = data.logicalRationale ?? "-";
+				tradeoffEl.textContent = data.tradeoffAnalysis ?? "-";
+				routingEl.textContent = data.routingOptimization ?? "-";
+
+				const resourceRows = normalizeResourceAllocation(data.resourceAllocation);
+				if (resourceRows.length > 0) {
+					for (const item of resourceRows) {
+						const li = document.createElement("li");
+						const label = document.createElement("span");
+						const value = document.createElement("span");
+						label.textContent = "Resource allocation:";
+						value.textContent = item;
+						li.append(label, value);
+						resourcesEl.appendChild(li);
+					}
+				} else {
+					const li = document.createElement("li");
+					li.textContent = "No resource allocation list was returned by AI.";
+					resourcesEl.appendChild(li);
+				}
+
+				stopProgress(100);
+				statusEl.textContent = "Generated";
+				statusEl.className = "good";
+				statusNoteEl.textContent = "Latest analysis completed successfully.";
+				resultWrap.classList.remove("hidden");
+			} catch (error) {
+				stopProgress(100);
+				statusEl.textContent = "Error";
+				statusEl.className = "bad";
+				statusNoteEl.textContent = "Generation failed. Review the error and retry.";
+				errorEl.textContent = `Generation error: ${error instanceof Error ? error.message : "Unknown error"}`;
+				errorEl.classList.remove("hidden");
+			} finally {
+				isRunning = false;
+				generateBtn.disabled = false;
+			}
+		}
+
+		generateBtn?.addEventListener("click", generateRecommendation);
+		refreshBtn?.addEventListener("click", () => window.location.reload());
+
+		if (shouldAutoGenerate) {
+			generateRecommendation();
+		}
+	</script>
 </BaseLayout>   

@@ -12,7 +12,10 @@ const pageTitle = "Audit Logs";
 				<p class="audit-lead">Traceability of recommendation</p>
 			</header>
 			<div>
-				<button type="button" class="audit-button--primary">Generate Recommendation</button>
+				<form method="get" action="/" class="action-form">
+					<input type="hidden" name="generate" value="1" />
+					<button type="submit" class="audit-button--primary">Generate Recommendation</button>
+				</form>
 				<button type="button" class="audit-button--primary">Refresh</button>
 			</div>
 		</section>
@@ -23,7 +26,10 @@ const pageTitle = "Audit Logs";
 					<h2 id="recent-runs-title">RECENT RUNS</h2>
 				</div>
 				<div>
-					<button type="button" class="audit-button--primary">Generate new recommendation</button>
+					<form method="get" action="/" class="action-form">
+						<input type="hidden" name="generate" value="1" />
+						<button type="submit" class="audit-button--primary">Generate new recommendation</button>
+					</form>
 					<button type="button" class="audit-button--danger">Clear Logs</button>
 				</div>
 			</header>

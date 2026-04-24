@@ -12,7 +12,10 @@ const pageTitle = "Intelligence";
 				<p class="intelligence-lead">External signals, risk markers, and market context</p>
 			</header>
 			<div>
-				<button type="button">Generate Recommendation</button>
+				<form method="get" action="/" class="action-form">
+					<input type="hidden" name="generate" value="1" />
+					<button type="submit">Generate Recommendation</button>
+				</form>
 				<button type="button">Refresh</button>
 			</div>
 		</section>
