@@ -1,34 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import "../styles/intelligence.css";
+import { getDieselSignal } from "../lib/fuelprice";
 const pageTitle = "Intelligence";
-
-type FuelPriceRow = {
-	date: string;
-	diesel: number | null;
-};
-
-let dieselLabel = "N/A";
-let dieselNote = "Latest price signal unavailable";
-
-try {
-	const response = await fetch("https://api.data.gov.my/data-catalogue?id=fuelprice");
-	if (!response.ok) {
-		throw new Error(`Fuel API HTTP ${response.status}`);
-	}
-
-	const rows = (await response.json()) as FuelPriceRow[];
-	const latest = rows
-		.filter((row) => row?.date && row?.diesel !== null && row?.diesel !== undefined)
-		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
-
-	if (latest) {
-		dieselLabel = `RM${latest.diesel!.toFixed(2)} / L`;
-		dieselNote = `Latest update: ${latest.date}`;
-	}
-} catch (error) {
-	dieselNote = error instanceof Error ? error.message : "Failed to load diesel signal";
-}
+const { dieselLabel, dieselNote } = await getDieselSignal();
 ---
 <BaseLayout title={pageTitle} indexOfNav={2}>
 	<main>
