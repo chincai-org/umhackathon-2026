@@ -12,7 +12,10 @@ const pageTitle = "Operations";
 				<p class="operations-lead">Hubs, capacity, dispatch plan, recommendations</p>
 			</header>
 			<div>
-				<button>Generate Recommendation</button>
+				<form method="get" action="/" class="action-form">
+					<input type="hidden" name="generate" value="1" />
+					<button type="submit">Generate Recommendation</button>
+				</form>
 				<button>Refresh</button>
 			</div>
 		</section>
