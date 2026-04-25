@@ -14,8 +14,8 @@ const averageUtilization = 73;
 				<p class="dashboard-lead">Fused operational intelligence and AI-driven dispatch recommendations.</p>
 			</header>
 			<div>
-				<button type="button" id="generate-recommendation-btn">Generate Recommendation</button>
-				<button type="button" id="refresh-dashboard-btn" onclick="window.location.href='/'">Refresh</button>
+				<a class="dashboard-action" href="/?generate=1">Generate Recommendation</a>
+				<a class="dashboard-action" href="/">Refresh</a>
 			</div>
 		</section>
 
@@ -28,8 +28,8 @@ const averageUtilization = 73;
 
 			<article>
 				<p class="dashboard-kicker">Recommendation status</p>
-				<strong class="dashboard-value"><span class={shouldAutoGenerate ? "info" : "good"} id="recommendation-status">{shouldAutoGenerate ? "Queued" : "Ready"}</span></strong>
-				<p class="dashboard-note" id="recommendation-status-note">{shouldAutoGenerate ? "AI generation queued from another module." : "Trigger generation to run AI trade-off analysis."}</p>
+				<strong class="dashboard-value"><span class="info" id="recommendation-status">{shouldAutoGenerate ? "Queued" : "Ready"}</span></strong>
+				<p class="dashboard-note" id="recommendation-status-note">{shouldAutoGenerate ? "Loading dashboard data and starting AI workflow." : "Trigger generation to run AI trade-off analysis."}</p>
 			</article>
 
 			<article>
@@ -41,24 +41,32 @@ const averageUtilization = 73;
 
 		<section aria-labelledby="ai-recommendation-title">
 			<header>
-				<h2 id="ai-recommendation-title">Z.AI Recommendation Center</h2>
+				<div class="ai-header">
+					<div class="ai-header-title">
+						<h2 id="ai-recommendation-title">AI Recommendation Center</h2>
+						<button
+							type="button"
+							class="ai-info-button"
+							aria-label="Displaying prescriptive, natural-language recommendations with logical rationales for resource allocation. Processing the fused data to perform complex trade-off analysis and routing optimizations."
+							data-tooltip="Displaying prescriptive, natural-language recommendations with logical rationales for resource allocation.\n\nProcessing the fused data to perform complex trade-off analysis and routing optimizations."
+						>
+							i
+						</button>
+					</div>
+				</div>
 			</header>
 			<article class="dashboard-panel">
-				<p><strong>Displaying prescriptive, natural-language recommendations with logical rationales for resource allocation.</strong></p>
-				<p><strong>Processing the fused data to perform complex trade-off analysis and routing optimizations.</strong></p>
-				<p class="dashboard-note" id="ai-hint">Press Generate Recommendation to run the AI workflow.</p>
-
-				<section id="ai-progress" class="ai-progress hidden" aria-live="polite">
-					<div class="ai-progress-meta">
-						<strong id="ai-progress-stage">Initializing...</strong>
-						<span id="ai-progress-percent">0%</span>
-					</div>
-					<div class="ai-progress-track">
-						<div class="ai-progress-bar" id="ai-progress-bar"></div>
+				<section id="ai-loading" class:list={{ hidden: !shouldAutoGenerate }} aria-live="polite">
+					<div class="ai-loading-line">
+						<div class="ai-loading-row">
+							<strong id="ai-loading-title">Loading AI response...</strong>
+							<span id="ai-loading-note">5%</span>
+						</div>
+						<div class="ai-progress-track">
+							<div class="ai-progress-bar" id="ai-progress-bar"></div>
+						</div>
 					</div>
 				</section>
-
-				<p id="ai-error" class="bad hidden"></p>
 
 				<section id="ai-result" class="hidden">
 					<p><strong>Title:</strong> <span id="ai-title"></span></p>
@@ -69,6 +77,11 @@ const averageUtilization = 73;
 					<p><strong>Routing optimization:</strong> <span id="ai-routing"></span></p>
 					<div id="ai-resource-allocation" class="dashboard-panel-section"></div>
 				</section>
+
+				<p id="ai-error" class="bad hidden"></p>
+				<p class:list={{ "dashboard-note": true, hidden: shouldAutoGenerate }} id="ai-hint">
+					Press Generate Recommendation to run the AI workflow.
+				</p>
 			</article>
 		</section>
 
@@ -134,14 +147,13 @@ const averageUtilization = 73;
 			{ threshold: 95, label: "Finalizing AI response..." },
 		];
 
-		const generateBtn = document.getElementById("generate-recommendation-btn");
 		const statusEl = document.getElementById("recommendation-status");
 		const statusNoteEl = document.getElementById("recommendation-status-note");
 		const hintEl = document.getElementById("ai-hint");
-		const progressWrap = document.getElementById("ai-progress");
-		const progressStage = document.getElementById("ai-progress-stage");
-		const progressPercent = document.getElementById("ai-progress-percent");
-		const progressBar = document.getElementById("ai-progress-bar");
+		const loadingEl = document.getElementById("ai-loading");
+		const loadingTitleEl = document.getElementById("ai-loading-title");
+		const loadingNoteEl = document.getElementById("ai-loading-note");
+		const loadingBarEl = document.getElementById("ai-progress-bar");
 		const errorEl = document.getElementById("ai-error");
 		const resultWrap = document.getElementById("ai-result");
 		const titleEl = document.getElementById("ai-title");
@@ -153,35 +165,26 @@ const averageUtilization = 73;
 		const resourcesEl = document.getElementById("ai-resource-allocation");
 
 		let isRunning = false;
-		let progressValue = 0;
+		let progressValue = 5;
 		let progressTimer = null;
 
 		function normalizeResourceAllocation(input) {
 			if (Array.isArray(input)) return input.map((item) => String(item)).filter(Boolean);
-			if (typeof input === "string") {
-				return input.split(/\r?\n|;/g).map((item) => item.trim()).filter(Boolean);
-			}
-			if (input && typeof input === "object") {
-				return Object.entries(input).map(([key, value]) => `${key}: ${String(value)}`);
-			}
 			return [];
 		}
 
 		function updateProgressUi(value) {
 			progressValue = Math.max(0, Math.min(100, value));
-			progressPercent.textContent = `${progressValue}%`;
-			progressBar.style.width = `${progressValue}%`;
-			const stage = progressPlan.find((item) => progressValue <= item.threshold) ?? progressPlan[progressPlan.length - 1];
-			progressStage.textContent = stage.label;
+			loadingNoteEl.textContent = `${progressValue}% complete`;
+			loadingBarEl.style.width = `${progressValue}%`;
 		}
 
 		function startProgress() {
-			progressWrap.classList.remove("hidden");
+			loadingEl?.classList.remove("hidden");
+			loadingEl?.classList.remove("ai-loading-fade-out");
 			updateProgressUi(5);
 			progressTimer = window.setInterval(() => {
-				if (progressValue < 92) {
-					updateProgressUi(progressValue + 3);
-				}
+				if (progressValue < 92) updateProgressUi(progressValue + 3);
 			}, 1500);
 		}
 
@@ -196,12 +199,11 @@ const averageUtilization = 73;
 		async function generateRecommendation() {
 			if (isRunning) return;
 			isRunning = true;
-			generateBtn.disabled = true;
 			errorEl.classList.add("hidden");
 			errorEl.textContent = "";
 			resultWrap.classList.add("hidden");
 			resourcesEl.innerHTML = "";
-			hintEl.classList.add("hidden");
+			hintEl?.classList.add("hidden");
 			statusEl.textContent = "Generating";
 			statusEl.className = "info";
 			statusNoteEl.textContent = "AI is processing fused dashboard data.";
@@ -210,48 +212,39 @@ const averageUtilization = 73;
 			try {
 				const response = await fetch("/api/recommendation", { method: "POST" });
 				const payload = await response.json();
-				if (!response.ok || !payload?.ok) {
-					throw new Error(payload?.error ?? `Request failed with ${response.status}`);
-				}
+				if (!response.ok || !payload?.ok) throw new Error(payload?.error ?? `Request failed with ${response.status}`);
 
 				const data = payload.result;
 				titleEl.textContent = data.title ?? "-";
 				severityEl.textContent = data.severity ?? "-";
-				severityEl.className =
-					data.severity === "Critical" || data.severity === "High"
-						? "bad"
-						: data.severity === "Medium"
-							? "warn"
-							: "good";
+				severityEl.className = data.severity === "Critical" || data.severity === "High" ? "bad" : data.severity === "Medium" ? "warn" : "good";
 				recommendationEl.textContent = data.naturalLanguageRecommendation ?? "-";
 				rationaleEl.textContent = data.logicalRationale ?? "-";
 				tradeoffEl.textContent = data.tradeoffAnalysis ?? "-";
 				routingEl.textContent = data.routingOptimization ?? "-";
+
 				const resourceRows = normalizeResourceAllocation(data.resourceAllocation);
+				const p = document.createElement("p");
+				const strong = document.createElement("strong");
+				strong.textContent = "Resource allocation:";
+				p.appendChild(strong);
+				resourcesEl.appendChild(p);
 
 				if (resourceRows.length > 0) {
-					const p = document.createElement("p");
-					const strong = document.createElement("strong");
-					strong.textContent = "Resource allocation:";
-					p.appendChild(strong);
-					resourcesEl.appendChild(p);
-
 					const ul = document.createElement("ul");
 					ul.style.listStyleType = "disc";
 					ul.style.marginLeft = "20px";
 					ul.style.marginTop = "8px";
-
 					for (const item of resourceRows) {
 						const li = document.createElement("li");
 						li.textContent = item;
 						ul.appendChild(li);
 					}
 					resourcesEl.appendChild(ul);
-					
 				} else {
-					const p = document.createElement("p");
-					p.textContent = "No resource allocation list was returned by AI.";
-					resourcesEl.appendChild(p);
+					const empty = document.createElement("p");
+					empty.textContent = "No resource allocation list was returned by AI.";
+					resourcesEl.appendChild(empty);
 				}
 
 				stopProgress(100);
@@ -259,6 +252,8 @@ const averageUtilization = 73;
 				statusEl.className = "good";
 				statusNoteEl.textContent = "Latest analysis completed successfully.";
 				resultWrap.classList.remove("hidden");
+				loadingEl?.classList.add("ai-loading-fade-out");
+				window.setTimeout(() => loadingEl?.classList.add("hidden"), 220);
 			} catch (error) {
 				stopProgress(100);
 				statusEl.textContent = "Error";
@@ -266,16 +261,16 @@ const averageUtilization = 73;
 				statusNoteEl.textContent = "Generation failed. Review the error and retry.";
 				errorEl.textContent = `Generation error: ${error instanceof Error ? error.message : "Unknown error"}`;
 				errorEl.classList.remove("hidden");
+				loadingEl?.classList.add("ai-loading-fade-out");
+				window.setTimeout(() => loadingEl?.classList.add("hidden"), 220);
 			} finally {
 				isRunning = false;
-				generateBtn.disabled = false;
 			}
 		}
-
-		generateBtn?.addEventListener("click", generateRecommendation);
 
 		if (shouldAutoGenerate) {
 			generateRecommendation();
 		}
 	</script>
-</BaseLayout>   
+
+</BaseLayout>

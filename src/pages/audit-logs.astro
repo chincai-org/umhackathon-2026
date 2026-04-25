@@ -12,9 +12,8 @@ const pageTitle = "Audit Logs";
 				<p class="audit-lead">Traceability of recommendation</p>
 			</header>
 			<div>
-				<button type="button" class="audit-button--primary" id="generate-recommendation-btn">Generate Recommendation</button>
-				<button type="button" 
-					class="audit-button--primary" id="refresh-audit-btn" onclick="window.location.reload()">Refresh</button>
+				<a class="audit-button--primary" href="/?generate=1">Generate Recommendation</a>
+				<a class="audit-button--primary" href="/audit-logs">Refresh</a>
 			</div>
 		</section>
 
@@ -24,8 +23,8 @@ const pageTitle = "Audit Logs";
 					<h2 id="recent-runs-title">RECENT RUNS</h2>
 				</div>
 				<div>
-					<button type="button" class="audit-button--primary" id="generate-new-recommendation-btn">Generate new recommendation</button>
-					<button type="button" class="audit-button--danger">Clear Logs</button>
+					<a class="audit-button--primary" href="/?generate=1">Generate new recommendation</a>
+					<a class="audit-button--danger" href="/audit-logs">Clear Logs</a>
 				</div>
 			</header>
 
@@ -68,15 +67,4 @@ const pageTitle = "Audit Logs";
 		</section>
 	</main>
 
-	<script is:inline>
-		const goToDashboardGenerate = () => {
-			window.location.href = "/?generate=1";
-		};
-		document
-			.getElementById("generate-recommendation-btn")
-			?.addEventListener("click", goToDashboardGenerate);
-		document
-			.getElementById("generate-new-recommendation-btn")
-			?.addEventListener("click", goToDashboardGenerate);
-	</script>
 </BaseLayout>

@@ -34,10 +34,22 @@ type ZoneWeather = {
   error?: string | null;
 };
 
+type OpenMeteoResponse = {
+  current?: {
+    temperature_2m?: number;
+    precipitation?: number;
+    wind_speed_10m?: number;
+  };
+  hourly?: {
+    precipitation_probability?: number[];
+    visibility?: number[];
+  };
+};
+
 // -------------------------
 // FETCH WEATHER (SAFE)
 // -------------------------
-async function fetchZone(lat: number, lon: number) {
+async function fetchZone(lat: number, lon: number): Promise<OpenMeteoResponse> {
   try {
     const url =
       `${WEATHER_URL}?latitude=${lat}&longitude=${lon}` +
@@ -51,7 +63,7 @@ async function fetchZone(lat: number, lon: number) {
       throw new Error(`Weather API HTTP ${res.status}`);
     }
 
-    return await res.json();
+    return (await res.json()) as OpenMeteoResponse;
   } catch (err) {
     throw new Error(
       err instanceof Error ? err.message : "Unknown weather fetch error"
@@ -62,7 +74,7 @@ async function fetchZone(lat: number, lon: number) {
 // -------------------------
 // WEATHER INTELLIGENCE ENGINE
 // -------------------------
-function computeWeather(data: any): {
+function computeWeather(data: OpenMeteoResponse): {
   condition: string;
   risk: ZoneWeather["risk"];
 } {

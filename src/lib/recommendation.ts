@@ -7,7 +7,7 @@ export const RecommendationSchema = z.strictObject({
 	logicalRationale: z.string().min(1),
 	tradeoffAnalysis: z.string().min(1),
 	routingOptimization: z.string().min(1),
-	resourceAllocation: z.unknown(),
+	resourceAllocation: z.array(z.string().min(1)),
 });
 
 export type RecommendationPayload = z.infer<typeof RecommendationSchema>;

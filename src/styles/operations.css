@@ -131,7 +131,11 @@
 		text-transform: uppercase;
 	}
 
-	button {
+	button,
+	.operations-action {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
 		padding-inline: 1.1rem;
 		border: 0;
 		border-radius: 100vw;
@@ -140,6 +144,7 @@
 		font-weight: 700;
 		box-shadow: 0 10px 24px rgba(124, 58, 237, 0.35);
 		transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+		text-decoration: none;
 
 		&:hover {
 			transform: translateY(-1px);

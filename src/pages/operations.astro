@@ -12,8 +12,8 @@ const pageTitle = "Operations";
 				<p class="operations-lead">Hubs, capacity, dispatch plan, recommendations</p>
 			</header>
 			<div>
-				<button type="button" id="generate-recommendation-btn">Generate Recommendation</button>
-				<button type="button" id="refresh-operations-btn" onclick="window.location.reload()">Refresh</button>
+				<a class="operations-action" href="/?generate=1">Generate Recommendation</a>
+				<a class="operations-action" href="/operations">Refresh</a>
 			</div>
 		</section>
 
@@ -97,11 +97,4 @@ const pageTitle = "Operations";
 		</section>
 	</main>
 
-	<script is:inline>
-		document
-			.getElementById("generate-recommendation-btn")
-			?.addEventListener("click", () => {
-				window.location.href = "/?generate=1";
-			});
-	</script>
 </BaseLayout>

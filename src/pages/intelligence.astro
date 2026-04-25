@@ -14,8 +14,8 @@ const pageTitle = "Intelligence";
 				<p class="intelligence-lead">External signals, risk markers, and market context</p>
 			</header>
 			<div>
-				<button type="button" id="generate-recommendation-btn">Generate Recommendation</button>
-				<button type="button" id="refresh-intelligence-btn" onclick="window.location.reload()">Refresh</button>
+				<a class="intelligence-action" href="/?generate=1">Generate Recommendation</a>
+				<a class="intelligence-action" href="/intelligence">Refresh</a>
 			</div>
 		</section>
 
@@ -81,11 +81,4 @@ const pageTitle = "Intelligence";
 			</div>
 		</section>
 	</main>
-	<script is:inline>
-		document
-			.getElementById("generate-recommendation-btn")
-			?.addEventListener("click", () => {
-				window.location.href = "/?generate=1";
-			});
-	</script>
 </BaseLayout>

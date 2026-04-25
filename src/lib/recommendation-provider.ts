@@ -102,7 +102,7 @@ export async function callRecommendationProvider(
 
         return aiRawText;
     } catch (error) {
-        console.log("[Z.AI] Error", error);
+        console.error("[Z.AI] Error", error);
         if (error instanceof Error && error.name === "AbortError") {
             throw new Error(
                 `AI request timeout (${attemptLabel}): no response in 100s`,

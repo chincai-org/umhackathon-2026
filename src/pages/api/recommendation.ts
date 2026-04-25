@@ -1,8 +1,5 @@
 import type { APIRoute } from "astro";
-import { getDieselSignal } from "../../lib/fuelprice";
-import { getRegionalWeatherSafe } from "../../lib/weather";
-import { callRecommendationProvider } from "../../lib/recommendation-provider";
-import { fallbackRecommendation, parseRecommendationJson } from "../../lib/recommendation";
+import { generateRecommendation } from "../../lib/recommendation-service";
 
 function jsonResponse(body: unknown, status = 200) {
 	return new Response(JSON.stringify(body), {
@@ -18,48 +15,8 @@ export const POST: APIRoute = async () => {
 	}
 
 	try {
-		const { dieselLabel, dieselNote, dieselHoverNote } = await getDieselSignal();
-		const regionalWeather = await getRegionalWeatherSafe();
-		const weatherSummary = Object.values(regionalWeather)
-			.map((zone) => `${zone.name}: ${zone.condition} (${zone.risk})`)
-			.join("; ");
-		const hubSnapshot = [
-			{ hub: "Hub A", packages24h: 1200, trucks: 18, utilization: 82, note: "Normal load" },
-			{ hub: "Hub B", packages24h: 860, trucks: 12, utilization: 64, note: "Under capacity" },
-		];
-
-		const averageUtilization = Math.round(
-			hubSnapshot.reduce((total, hub) => total + hub.utilization, 0) / hubSnapshot.length,
-		);
-
-		const fusedContext = {
-			fuel: { price: dieselLabel, note: dieselNote, trend: dieselHoverNote },
-			weather: {
-				summary: weatherSummary,
-				byZone: regionalWeather,
-			},
-			signals: [
-				"Fuel pricing trend indicates elevated cost pressure.",
-				`Weather update: ${weatherSummary || "No weather summary available."}`,
-				"Port congestion still visible on inbound replenishment.",
-				"Weekend demand lift expected in urban zones.",
-			],
-			hubs: hubSnapshot,
-			truckAllocation: "Hub A: 18 trucks, Hub B: 12 trucks",
-			utilization: {
-				average: `${averageUtilization}%`,
-				byHub: hubSnapshot.map((hub) => `${hub.hub}: ${hub.utilization}%`),
-			},
-		};
-
-		const aiRawText = await callRecommendationProvider(apiKey, fusedContext, "attempt 1");
-		const parsed = parseRecommendationJson(aiRawText);
-
-		if (!parsed) {
-			return jsonResponse({ ok: true, result: fallbackRecommendation(aiRawText), raw: aiRawText });
-		}
-
-		return jsonResponse({ ok: true, result: parsed, raw: aiRawText });
+		const { result, raw } = await generateRecommendation(apiKey);
+		return jsonResponse({ ok: true, result, raw });
 	} catch (error) {
 		return jsonResponse(
 			{
