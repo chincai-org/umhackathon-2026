@@ -14,8 +14,6 @@
 // const data = await response.json();
 // console.log(data.choices?.[0]?.message?.content || data);
 
-import OpenAI from "openai";
-
 // const client = new OpenAI({
 //     apiKey: "sk-ee4d162134a084aba30b9410e8055081c6a064a2cb7d0d22",
 //     baseURL: "https://api.ilmu.ai/v1",
@@ -28,6 +26,8 @@ import OpenAI from "openai";
 
 // console.log(response.choices[0].message.content);
 
+export {};
+
 /**
  * Accepts query search it using Brave API
  * @param query Search query
@@ -38,17 +38,24 @@ import OpenAI from "openai";
 async function search(query: string, num: number = 20, date: Date) {
     const today: string = new Date().toISOString().split("T")[0];
     const freshness: string = date.toISOString().split("T")[0] + "to" + today;
+    const token = process.env.BRAVE_API;
+
     try {
+        const headers: Record<string, string> = {
+            accept: "application/json",
+            "Accept-Encoding": "gzip",
+            "Content-Type": "application/json",
+        };
+
+        if (token) {
+            headers["X-Subscription-Token"] = token;
+        }
+
         const res = await fetch(
             "https://api.search.brave.com/res/v1/llm/context",
             {
                 method: "POST",
-                headers: {
-                    "X-Subscription-Token": process.env.BRAVE_API,
-                    accept: "application/json",
-                    "Accept-Encoding": `gzip`,
-                    "Content-Type": `application/json`,
-                },
+                headers,
                 body: JSON.stringify({
                     q: query,
                     count: num,

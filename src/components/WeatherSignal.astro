@@ -5,7 +5,7 @@ const zones = await getRegionalWeatherSafe();
 ---
 
 <div class="zone-grid">
-  {Object.entries(zones).map(([key, zone]) => (
+  {Object.entries(zones).map(([, zone]) => (
     <article class={`zone-card risk-${zone.risk.toLowerCase()}`}>
       <h3>{zone.name}</h3>
 

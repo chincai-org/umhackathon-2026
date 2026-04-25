@@ -31,7 +31,7 @@ export const ProviderErrorSchema = z
 			.optional(),
 		message: z.string().optional(),
 	})
-	.passthrough();
+	.catchall(z.unknown());
 
 export function parseRecommendationJson(
 	content: string,
