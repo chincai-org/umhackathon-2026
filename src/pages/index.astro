@@ -67,7 +67,7 @@ const averageUtilization = 73;
 					<p><strong>Logical rationale:</strong> <span id="ai-rationale"></span></p>
 					<p><strong>Trade-off analysis:</strong> <span id="ai-tradeoff"></span></p>
 					<p><strong>Routing optimization:</strong> <span id="ai-routing"></span></p>
-					<ul class="dashboard-activity" id="ai-resource-allocation"></ul>
+					<div id="ai-resource-allocation" class="dashboard-panel-section"></div>
 				</section>
 			</article>
 		</section>
@@ -227,22 +227,31 @@ const averageUtilization = 73;
 				rationaleEl.textContent = data.logicalRationale ?? "-";
 				tradeoffEl.textContent = data.tradeoffAnalysis ?? "-";
 				routingEl.textContent = data.routingOptimization ?? "-";
-
 				const resourceRows = normalizeResourceAllocation(data.resourceAllocation);
+
 				if (resourceRows.length > 0) {
+					const p = document.createElement("p");
+					const strong = document.createElement("strong");
+					strong.textContent = "Resource allocation:";
+					p.appendChild(strong);
+					resourcesEl.appendChild(p);
+
+					const ul = document.createElement("ul");
+					ul.style.listStyleType = "disc";
+					ul.style.marginLeft = "20px";
+					ul.style.marginTop = "8px";
+
 					for (const item of resourceRows) {
 						const li = document.createElement("li");
-						const label = document.createElement("span");
-						const value = document.createElement("span");
-						label.textContent = "Resource allocation: ";
-						value.textContent = item;
-						li.append(label, value);
-						resourcesEl.appendChild(li);
+						li.textContent = item;
+						ul.appendChild(li);
 					}
+					resourcesEl.appendChild(ul);
+					
 				} else {
-					const li = document.createElement("li");
-					li.textContent = "No resource allocation list was returned by AI.";
-					resourcesEl.appendChild(li);
+					const p = document.createElement("p");
+					p.textContent = "No resource allocation list was returned by AI.";
+					resourcesEl.appendChild(p);
 				}
 
 				stopProgress(100);
