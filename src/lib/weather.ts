@@ -1,4 +1,7 @@
 const WEATHER_URL = "https://api.open-meteo.com/v1/forecast";
+const WEATHER_CACHE_TTL_MS = 5 * 60 * 1000;
+
+let cachedWeather: { at: number; data: Record<string, ZoneWeather> } | null = null;
 
 export const zones = {
   west: {
@@ -134,6 +137,10 @@ export function computeWeather(data: OpenMeteoResponse): {
 // MAIN FUNCTION
 // -------------------------
 export async function getRegionalWeatherSafe() {
+  if (cachedWeather && Date.now() - cachedWeather.at < WEATHER_CACHE_TTL_MS) {
+    return cachedWeather.data;
+  }
+
   const entries = Object.entries(zones);
 
   const results = await Promise.allSettled(
@@ -178,6 +185,8 @@ export async function getRegionalWeatherSafe() {
       };
     }
   }
+
+  cachedWeather = { at: Date.now(), data: out };
 
   return out;
 }

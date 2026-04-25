@@ -8,7 +8,7 @@
 		corner-shape: squircle;
 		background: linear-gradient(135deg, #10172a 0%, #1b2a4a 55%, #243b63 100%);
 		border: 1px solid rgba(255, 255, 255, 0.12);
-		box-shadow: 0 20px 10px rgba(0, 0, 0, 0.35);
+		box-shadow: 0 20px 10px rgba(0, 0, 0, 0.1);
 
 		header {
 			display: grid;
@@ -131,8 +131,7 @@
 		text-transform: uppercase;
 	}
 
-	button,
-	.operations-action {
+	.operations-button {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;

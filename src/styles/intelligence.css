@@ -8,7 +8,7 @@
 		corner-shape: squircle;
 		background: linear-gradient(135deg, #132238 0%, #1b3456 50%, #273f66 100%);
 		border: 1px solid rgba(255, 255, 255, 0.12);
-		box-shadow: 0 20px 10px rgba(0, 0, 0, 0.35);
+		box-shadow: 0 20px 10px rgba(0, 0, 0, 0.1);
 
 		header {
 			display: grid;
@@ -169,8 +169,7 @@
 		text-transform: uppercase;
 	}
 
-	button,
-	.intelligence-action {
+	.intelligence-button {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;

@@ -1,4 +1,9 @@
 const FUELPRICE_URL = "https://api.data.gov.my/data-catalogue?id=fuelprice";
+const FUELPRICE_CACHE_TTL_MS = 5 * 60 * 1000;
+
+let cachedDieselSignal:
+    | { at: number; data: { dieselLabel: string; dieselNote: string; dieselCaret: "^" | "v" | "-" | "?"; dieselHoverNote: string } }
+    | null = null;
 
 type FuelPriceRow = {
     date: string;
@@ -12,6 +17,10 @@ export async function getDieselSignal(): Promise<{
     dieselCaret: "^" | "v" | "-" | "?";
     dieselHoverNote: string;
 }> {
+    if (cachedDieselSignal && Date.now() - cachedDieselSignal.at < FUELPRICE_CACHE_TTL_MS) {
+        return cachedDieselSignal.data;
+    }
+
     try {
         const response = await fetch(FUELPRICE_URL);
         if (!response.ok) {
@@ -56,12 +65,16 @@ export async function getDieselSignal(): Promise<{
                 ? "No weekly change point"
                 : `${weeklyDelta > 0 ? "+" : ""}${weeklyDelta.toFixed(2)} (week-on-week)`;
 
-        return {
+        const result = {
             dieselLabel: `RM${latestLevel.diesel!.toFixed(2)} / L`,
             dieselNote: `Latest update: ${latestLevel.date}`,
             dieselCaret,
             dieselHoverNote: `Diesel change: ${changeText}`,
         };
+
+        cachedDieselSignal = { at: Date.now(), data: result };
+
+        return result;
     } catch (error) {
         return {
             dieselLabel: "N/A",
