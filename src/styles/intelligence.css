@@ -31,10 +31,16 @@
 		grid-template-columns: 1fr 1fr;
 		gap: 1rem;
 
-		.zone-grid {
-			display: grid;
-			gap: 0.75rem;
-		}
+ 	.zone-grid {
+		display: grid;
+		gap: 0.75rem;
+	}
+
+	.zone-updated {
+		margin: 0 0 0.25rem;
+		color: rgba(255, 255, 255, 0.62);
+		font-size: 0.85rem;
+	}
 
 		article {
 			padding: 1.25rem;
@@ -112,6 +118,11 @@
 	.intelligence-note {
 		margin: 0;
 		color: rgba(255, 255, 255, 0.78);
+	}
+
+	.intelligence-updated {
+		font-size: 0.85rem;
+		color: rgba(255, 255, 255, 0.62);
 	}
 
 	#diesel-signal[aria-busy="true"] {

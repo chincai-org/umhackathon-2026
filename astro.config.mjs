@@ -2,12 +2,12 @@
 import { defineConfig } from "astro/config";
 import { browserslistToTargets } from "lightningcss";
 import browserslist from "browserslist";
-import node from "@astrojs/node";
+import bun from "@wyattjoh/astro-bun-adapter";
 
 // https://astro.build/config
 export default defineConfig({
-	output: "server", // or 'hybrid'
-	adapter: node({ mode: "standalone" }),
+	output: "server",
+	adapter: bun(),
 	vite: {
 		build: {
 			cssMinify: "lightningcss",

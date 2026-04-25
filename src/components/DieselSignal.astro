@@ -1,15 +1,14 @@
 ---
 import { getDieselSignal } from "../lib/fuelprice";
 
-const { dieselLabel, dieselNote, dieselCaret, dieselHoverNote } = await getDieselSignal();
+const { dieselLabel, dieselNote, dieselCaret, dieselHoverNote, updatedAt } = await getDieselSignal();
 ---
 
 <div id="diesel-signal" aria-busy="false">
+	<p class="intelligence-note intelligence-updated">Last updated: {new Date(updatedAt).toLocaleString([], { dateStyle: "medium", timeStyle: "short" })}</p>
 	<strong class="intelligence-value">
 		{dieselLabel}
-		<span class="diesel-caret" data-tooltip={dieselHoverNote} tabindex="0">
-			{dieselCaret}
-		</span>
+		<span class="diesel-caret" data-tooltip={dieselHoverNote} tabindex="0">{dieselCaret}</span>
 	</strong>
 	<p class="intelligence-note">{dieselNote}</p>
 </div>

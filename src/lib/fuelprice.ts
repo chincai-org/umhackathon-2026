@@ -2,7 +2,16 @@ const FUELPRICE_URL = "https://api.data.gov.my/data-catalogue?id=fuelprice";
 const FUELPRICE_CACHE_TTL_MS = 5 * 60 * 1000;
 
 let cachedDieselSignal:
-    | { at: number; data: { dieselLabel: string; dieselNote: string; dieselCaret: "^" | "v" | "-" | "?"; dieselHoverNote: string } }
+    | {
+          at: number;
+          data: {
+              dieselLabel: string;
+              dieselNote: string;
+              dieselCaret: "^" | "v" | "-" | "?";
+              dieselHoverNote: string;
+              updatedAt: number;
+          };
+      }
     | null = null;
 
 type FuelPriceRow = {
@@ -16,6 +25,7 @@ export async function getDieselSignal(): Promise<{
     dieselNote: string;
     dieselCaret: "^" | "v" | "-" | "?";
     dieselHoverNote: string;
+    updatedAt: number;
 }> {
     if (cachedDieselSignal && Date.now() - cachedDieselSignal.at < FUELPRICE_CACHE_TTL_MS) {
         return cachedDieselSignal.data;
@@ -49,6 +59,7 @@ export async function getDieselSignal(): Promise<{
                 dieselNote: "Latest price signal unavailable",
                 dieselCaret: "?",
                 dieselHoverNote: "No diesel trend data",
+                updatedAt: Date.now(),
             };
         }
         const weeklyDelta = latestWeeklyChange?.diesel ?? null;
@@ -70,6 +81,7 @@ export async function getDieselSignal(): Promise<{
             dieselNote: `Latest update: ${latestLevel.date}`,
             dieselCaret,
             dieselHoverNote: `Diesel change: ${changeText}`,
+            updatedAt: Date.now(),
         };
 
         cachedDieselSignal = { at: Date.now(), data: result };
@@ -84,6 +96,7 @@ export async function getDieselSignal(): Promise<{
                     : "Failed to load diesel signal",
             dieselCaret: "?",
             dieselHoverNote: "Daily trend unavailable",
+            updatedAt: Date.now(),
         };
     }
 }
