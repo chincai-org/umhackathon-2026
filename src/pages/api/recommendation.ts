@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { getDieselSignal } from "../../lib/fuelprice";
+import { getRegionalWeatherSafe } from "../../lib/weather";
 import { callRecommendationProvider } from "../../lib/recommendation-provider";
 import { fallbackRecommendation, parseRecommendationJson } from "../../lib/recommendation";
 
@@ -18,6 +19,10 @@ export const POST: APIRoute = async () => {
 
 	try {
 		const { dieselLabel, dieselNote, dieselHoverNote } = await getDieselSignal();
+		const regionalWeather = await getRegionalWeatherSafe();
+		const weatherSummary = Object.values(regionalWeather)
+			.map((zone) => `${zone.name}: ${zone.condition} (${zone.risk})`)
+			.join("; ");
 		const hubSnapshot = [
 			{ hub: "Hub A", packages24h: 1200, trucks: 18, utilization: 82, note: "Normal load" },
 			{ hub: "Hub B", packages24h: 860, trucks: 12, utilization: 64, note: "Under capacity" },
@@ -29,9 +34,13 @@ export const POST: APIRoute = async () => {
 
 		const fusedContext = {
 			fuel: { price: dieselLabel, note: dieselNote, trend: dieselHoverNote },
-			weather: "East coast rainfall likely to delay several delivery windows.",
+			weather: {
+				summary: weatherSummary,
+				byZone: regionalWeather,
+			},
 			signals: [
 				"Fuel pricing trend indicates elevated cost pressure.",
+				`Weather update: ${weatherSummary || "No weather summary available."}`,
 				"Port congestion still visible on inbound replenishment.",
 				"Weekend demand lift expected in urban zones.",
 			],
