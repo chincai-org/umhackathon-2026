@@ -2,7 +2,7 @@
 // const response = await fetch("https://api.ilmu.ai/v1/chat/completions", {
 //     method: "POST",
 //     headers: {
-//         Authorization: `Bearer sk-ee4d162134a084aba30b9410e8055081c6a064a2cb7d0d22`,
+//         Authorization: `Bearer ${process.env.LLM_API}`,
 //         "Content-Type": "application/json",
 //     },
 //     body: JSON.stringify({
@@ -15,7 +15,7 @@
 // console.log(data.choices?.[0]?.message?.content || data);
 
 // const client = new OpenAI({
-//     apiKey: "sk-ee4d162134a084aba30b9410e8055081c6a064a2cb7d0d22",
+//     apiKey: process.env.LLM_API,
 //     baseURL: "https://api.ilmu.ai/v1",
 // });
 
@@ -35,7 +35,7 @@ export {};
  * @param date Search result until today
  * @returns JSON object of the results
  */
-async function search(query: string, num: number = 20, date: Date) {
+export async function search(query: string, num: number = 20, date: Date) {
     const today: string = new Date().toISOString().split("T")[0];
     const freshness: string = date.toISOString().split("T")[0] + "to" + today;
     const token = process.env.BRAVE_API;
@@ -71,9 +71,9 @@ async function search(query: string, num: number = 20, date: Date) {
     }
 }
 
-const results = await search(
-    "Black detective conan",
-    20,
-    new Date("2026-1-20"),
-);
-console.log(JSON.stringify(results, null, 4));
+// const results = await search(
+//     "Black detective conan",
+//     20,
+//     new Date("2026-1-20"),
+// );
+// console.log(JSON.stringify(results, null, 4));
