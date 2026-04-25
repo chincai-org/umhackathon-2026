@@ -3,7 +3,7 @@
 our pitch [Pitch video](logimind.mkv)
 
 
-our demo video [Demo video](logimind-demo.mp3)
+our demo video [Demo video](logimind-demo.mp4)
 
 
 > A dashboard about fused operational intelligence and AI-driven dispatch recommendations.
