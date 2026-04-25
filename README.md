@@ -1,4 +1,8 @@
-# umhackathon-2026 ✨
+# LogiMind (umhackathon-2026)
+
+our pitch [Pitch video](logimind.mkv)
+our demo video [Demo video](logimind-demo.mp3)
+
 
 > A dashboard about fused operational intelligence and AI-driven dispatch recommendations.
 
