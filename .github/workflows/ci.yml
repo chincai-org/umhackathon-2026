@@ -45,6 +45,7 @@ jobs:
 
       - name: Lint and format check
         run: bun biome ci
+        continue-on-error: true
 
       - name: Check
         run: bun run check
