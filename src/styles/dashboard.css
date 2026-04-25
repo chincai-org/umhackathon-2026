@@ -112,7 +112,9 @@
 		width: 1rem;
 		height: 1rem;
 		color: #60a5fa;
-		transition: transform 140ms ease, color 140ms ease;
+		transition:
+			transform 140ms ease,
+			color 140ms ease;
 	}
 
 	.ai-info-button:hover .ai-info-icon,
@@ -300,7 +302,6 @@
 			outline-offset: 3px;
 		}
 	}
-
 }
 
 @layer utilities {
