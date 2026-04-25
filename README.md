@@ -1,6 +1,8 @@
 # LogiMind (umhackathon-2026)
 
 our pitch [Pitch video](logimind.mkv)
+
+
 our demo video [Demo video](logimind-demo.mp3)
 
 
