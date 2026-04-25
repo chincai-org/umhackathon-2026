@@ -21,6 +21,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: action/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'bun'
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
