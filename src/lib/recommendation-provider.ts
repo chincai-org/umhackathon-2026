@@ -2,7 +2,7 @@ import { AiResponseSchema, ProviderErrorSchema } from "./recommendation";
 
 const requestUrl = "https://api.ilmu.ai/v1/chat/completions";
 
-function buildRequestPayload(fusedContext: unknown) {
+export function buildRequestPayload(fusedContext: unknown) {
     return {
         model: "ilmu-glm-5.1",
         messages: [

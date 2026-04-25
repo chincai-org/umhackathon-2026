@@ -34,8 +34,8 @@ const riskKeywords: string[] = [
 	"political unrest",
 ];
 
-export function buildApiUrl(keyword: string, num: number = 10) {
-	const now = new Date();
+export function buildApiUrl(keyword: string, num: number = 10, baseDate: Date = new Date()) {
+	const now = baseDate;
 	const today = now.toISOString().split("T")[0];
 	const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1));
 	const startDate = start.toISOString().split("T")[0];

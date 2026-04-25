@@ -139,19 +139,10 @@ const averageUtilization = 73;
 	</main>
 
 	<script is:inline define:vars={{ shouldAutoGenerate }}>
-		const progressPlan = [
-			{ threshold: 15, label: "Collecting fuel, weather, and signal data..." },
-			{ threshold: 35, label: "Fusing hub utilization and truck allocation..." },
-			{ threshold: 65, label: "Running trade-off analysis..." },
-			{ threshold: 85, label: "Optimizing routes and drafting recommendation..." },
-			{ threshold: 95, label: "Finalizing AI response..." },
-		];
-
 		const statusEl = document.getElementById("recommendation-status");
 		const statusNoteEl = document.getElementById("recommendation-status-note");
 		const hintEl = document.getElementById("ai-hint");
 		const loadingEl = document.getElementById("ai-loading");
-		const loadingTitleEl = document.getElementById("ai-loading-title");
 		const loadingNoteEl = document.getElementById("ai-loading-note");
 		const loadingBarEl = document.getElementById("ai-progress-bar");
 		const errorEl = document.getElementById("ai-error");

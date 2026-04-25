@@ -31,6 +31,43 @@ ILMU_API_KEY=your_api_key_here
 - `bun run check` - run Astro type and config checks
 - `bun run preview` - preview the built site locally
 
+## 🧪 Tests
+
+Run the test suite with:
+
+```bash
+bun test
+```
+
+### What the tests cover
+
+- `src/lib/recommendation.test.ts`
+  - `parseRecommendationJson` with fenced JSON
+  - malformed JSON that should return `null`
+  - invalid `resourceAllocation` shapes that should be rejected
+  - `buildRequestPayload` prompt formatting and fused context serialization
+
+- `src/lib/pipeline.test.ts`
+  - `buildApiUrl` date range and query formatting with a fixed base date
+  - `computeWeather` classification for storm, low visibility, and stable conditions
+  - `AiResponseSchema` validation for empty content
+  - `ProviderErrorSchema` parsing for provider error bodies
+  - `fallbackRecommendation` output shape when AI returns plain text
+
+### Why these tests exist
+
+- Protect parsing logic from malformed AI output.
+- Keep prompt text stable when the model request changes.
+- Catch regressions in weather and news data shaping.
+- Verify fallback paths still return usable dashboard data.
+- Keep date-sensitive URL generation deterministic in tests.
+
+### Mocking rules
+
+- External API calls are not used in these tests.
+- GLM API, weather API, and other live dependencies should be mocked in route-level or integration tests.
+- Pure transformation logic stays covered here so failures are fast and deterministic.
+
 ## 🗂️ What’s Inside
 
 - `src/pages/` - site pages and API routes

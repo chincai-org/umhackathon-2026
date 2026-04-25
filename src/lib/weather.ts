@@ -74,7 +74,7 @@ async function fetchZone(lat: number, lon: number): Promise<OpenMeteoResponse> {
 // -------------------------
 // WEATHER INTELLIGENCE ENGINE
 // -------------------------
-function computeWeather(data: OpenMeteoResponse): {
+export function computeWeather(data: OpenMeteoResponse): {
   condition: string;
   risk: ZoneWeather["risk"];
 } {
