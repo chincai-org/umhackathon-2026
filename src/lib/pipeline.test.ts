@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { buildApiUrl } from "../../news";
+import { buildApiUrl } from "./news";
 import {
 	AiResponseSchema,
 	fallbackRecommendation,

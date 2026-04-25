@@ -41,11 +41,15 @@ const riskKeywords: string[] = [
     "political unrest",
 ];
 
-function buildapiUrl(keyword: string, num: number = 10) {
-    var d = new Date();
+export function buildApiUrl(
+    keyword: string,
+    num: number = 10,
+    baseDate: Date = new Date(),
+) {
+    var d = new Date(baseDate);
     var m = d.getMonth();
     d.setMonth(d.getMonth() - 1);
-    const today = new Date().toISOString().split("T")[0];
+    const today = new Date(baseDate).toISOString().split("T")[0];
 
     // If still in same month, set date to last day of
     // previous month
@@ -60,7 +64,7 @@ function buildapiUrl(keyword: string, num: number = 10) {
         languages: "en",
         sort: "published_desc",
         limit: num.toString(),
-        date: "2025-04-26" + "," + today, // ⚠️Please change to only get news from one month ago
+        date: `${oneMonthAgo},${today}`,
     });
     const url = `https://api.mediastack.com/v1/news?${params.toString()}`;
     return url;
@@ -73,7 +77,7 @@ export async function getRiskNews(
 
     // ✅ Use for...of instead of forEach to properly await async calls
     for (const keyword of keywords) {
-        const url = buildapiUrl(keyword);
+        const url = buildApiUrl(keyword);
 
         try {
             console.log(`🔍 Fetching news for: "${keyword}"`);
