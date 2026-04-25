@@ -47,10 +47,7 @@ export function parseRecommendationJson(
 		const result = RecommendationSchema.safeParse(rawJson);
 
 		if (!result.success) {
-			console.warn(
-				"[Z.AI] Invalid recommendation JSON",
-				result.error.issues,
-			);
+			console.warn("[Z.AI] Invalid recommendation JSON", result.error.issues);
 			return null;
 		}
 

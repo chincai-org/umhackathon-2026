@@ -11,7 +11,10 @@ function jsonResponse(body: unknown, status = 200) {
 export const POST: APIRoute = async () => {
 	const apiKey = String(import.meta.env.ILMU_API_KEY ?? "").trim();
 	if (!apiKey) {
-		return jsonResponse({ ok: false, error: "Missing ILMU_API_KEY in .env" }, 500);
+		return jsonResponse(
+			{ ok: false, error: "Missing ILMU_API_KEY in .env" },
+			500,
+		);
 	}
 
 	try {
@@ -21,7 +24,10 @@ export const POST: APIRoute = async () => {
 		return jsonResponse(
 			{
 				ok: false,
-				error: error instanceof Error ? error.message : "Failed to generate recommendation",
+				error:
+					error instanceof Error
+						? error.message
+						: "Failed to generate recommendation",
 			},
 			500,
 		);

@@ -34,10 +34,16 @@ const riskKeywords: string[] = [
 	"political unrest",
 ];
 
-export function buildApiUrl(keyword: string, num: number = 10, baseDate: Date = new Date()) {
+export function buildApiUrl(
+	keyword: string,
+	num: number = 10,
+	baseDate: Date = new Date(),
+) {
 	const now = baseDate;
 	const today = now.toISOString().split("T")[0];
-	const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1));
+	const start = new Date(
+		Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1),
+	);
 	const startDate = start.toISOString().split("T")[0];
 
 	const params = new URLSearchParams({
@@ -54,7 +60,9 @@ export function buildApiUrl(keyword: string, num: number = 10, baseDate: Date = 
 	return `https://api.mediastack.com/v1/news?${params.toString()}`;
 }
 
-export async function getRiskNews(keywords: string[] = riskKeywords): Promise<NewsArticle[]> {
+export async function getRiskNews(
+	keywords: string[] = riskKeywords,
+): Promise<NewsArticle[]> {
 	const allArticles: NewsArticle[] = [];
 
 	for (const keyword of keywords) {
@@ -71,8 +79,23 @@ export async function getRiskNews(keywords: string[] = riskKeywords): Promise<Ne
 
 			if (results.data && Array.isArray(results.data)) {
 				const filtered = results.data
-					.filter((article): article is Required<Pick<NewsApiArticle, "title" | "description" | "url" | "published_at" | "source">> & NewsApiArticle =>
-						Boolean(article.title && article.description && article.url && article.published_at && article.source),
+					.filter(
+						(
+							article,
+						): article is Required<
+							Pick<
+								NewsApiArticle,
+								"title" | "description" | "url" | "published_at" | "source"
+							>
+						> &
+							NewsApiArticle =>
+							Boolean(
+								article.title &&
+									article.description &&
+									article.url &&
+									article.published_at &&
+									article.source,
+							),
 					)
 					.map((article) => ({
 						title: article.title,

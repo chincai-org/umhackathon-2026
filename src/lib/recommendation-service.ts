@@ -1,6 +1,10 @@
 import { getDieselSignal } from "./fuelprice";
 import { callRecommendationProvider } from "./recommendation-provider";
-import { fallbackRecommendation, parseRecommendationJson, type RecommendationPayload } from "./recommendation";
+import {
+	fallbackRecommendation,
+	parseRecommendationJson,
+	type RecommendationPayload,
+} from "./recommendation";
 import { getRegionalWeatherSafe } from "./weather";
 
 export async function buildFusedContext() {
@@ -13,12 +17,25 @@ export async function buildFusedContext() {
 		.map((zone) => `${zone.name}: ${zone.condition} (${zone.risk})`)
 		.join("; ");
 	const hubSnapshot = [
-		{ hub: "Hub A", packages24h: 1200, trucks: 18, utilization: 82, note: "Normal load" },
-		{ hub: "Hub B", packages24h: 860, trucks: 12, utilization: 64, note: "Under capacity" },
+		{
+			hub: "Hub A",
+			packages24h: 1200,
+			trucks: 18,
+			utilization: 82,
+			note: "Normal load",
+		},
+		{
+			hub: "Hub B",
+			packages24h: 860,
+			trucks: 12,
+			utilization: 64,
+			note: "Under capacity",
+		},
 	];
 
 	const averageUtilization = Math.round(
-		hubSnapshot.reduce((total, hub) => total + hub.utilization, 0) / hubSnapshot.length,
+		hubSnapshot.reduce((total, hub) => total + hub.utilization, 0) /
+			hubSnapshot.length,
 	);
 
 	return {
@@ -50,9 +67,16 @@ export async function buildFusedContext() {
 	};
 }
 
-export async function generateRecommendation(apiKey: string, attemptLabel = "attempt 1"): Promise<{ result: RecommendationPayload; raw: string }> {
+export async function generateRecommendation(
+	apiKey: string,
+	attemptLabel = "attempt 1",
+): Promise<{ result: RecommendationPayload; raw: string }> {
 	const { fusedContext } = await buildFusedContext();
-	const aiRawText = await callRecommendationProvider(apiKey, fusedContext, attemptLabel);
+	const aiRawText = await callRecommendationProvider(
+		apiKey,
+		fusedContext,
+		attemptLabel,
+	);
 	const parsed = parseRecommendationJson(aiRawText);
 
 	return {
