@@ -1,33 +1,3 @@
-// test-ilmu.js
-// const response = await fetch("https://api.ilmu.ai/v1/chat/completions", {
-//     method: "POST",
-//     headers: {
-//         Authorization: `Bearer ${process.env.LLM_API}`,
-//         "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//         model: "ilmu-glm-5.1",
-//         messages: [{ role: "user", content: "Hello from Bun!" }],
-//     }),
-// });
-
-// const data = await response.json();
-// console.log(data.choices?.[0]?.message?.content || data);
-
-// const client = new OpenAI({
-//     apiKey: process.env.LLM_API,
-//     baseURL: "https://api.ilmu.ai/v1",
-// });
-
-// const response = await client.chat.completions.create({
-//     model: "ilmu-glm-5.1",
-//     messages: [{ role: "user", content: "Explain quicksort in 3 sentences." }],
-// });
-
-// console.log(response.choices[0].message.content);
-
-export {};
-
 /**
  * Accepts query search it using Brave API
  * @param query Search query

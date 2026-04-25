@@ -1,10 +1,10 @@
 import { getDieselSignal } from "./fuelprice";
-import { callRecommendationProvider } from "./recommendation-provider";
 import {
 	fallbackRecommendation,
 	parseRecommendationJson,
 	type RecommendationPayload,
 } from "./recommendation";
+import { callRecommendationProvider } from "./recommendation-provider";
 import { getRegionalWeatherSafe } from "./weather";
 
 export async function buildFusedContext() {
@@ -13,7 +13,7 @@ export async function buildFusedContext() {
 		getRegionalWeatherSafe(),
 	]);
 
-	const weatherSummary = Object.values(regionalWeather)
+	const weatherSummary = Object.values(regionalWeather.zones)
 		.map((zone) => `${zone.name}: ${zone.condition} (${zone.risk})`)
 		.join("; ");
 	const hubSnapshot = [

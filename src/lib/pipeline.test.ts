@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { buildApiUrl } from "../../news";
 import {
-	fallbackRecommendation,
 	AiResponseSchema,
+	fallbackRecommendation,
 	ProviderErrorSchema,
 } from "./recommendation";
 import { computeWeather } from "./weather";

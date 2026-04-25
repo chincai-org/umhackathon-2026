@@ -80,7 +80,13 @@ export async function getDieselSignal(): Promise<{
 				? "No weekly change point"
 				: `${weeklyDelta > 0 ? "+" : ""}${weeklyDelta.toFixed(2)} (week-on-week)`;
 
-		const result = {
+		const result: {
+			dieselLabel: string;
+			dieselNote: string;
+			dieselCaret: "^" | "v" | "-" | "?";
+			dieselHoverNote: string;
+			updatedAt: number;
+		} = {
 			dieselLabel: `RM${latestLevel.diesel!.toFixed(2)} / L`,
 			dieselNote: `Latest update: ${latestLevel.date}`,
 			dieselCaret,

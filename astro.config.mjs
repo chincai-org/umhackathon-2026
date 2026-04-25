@@ -1,8 +1,9 @@
 // @ts-check
-import { defineConfig } from "astro/config";
-import { browserslistToTargets } from "lightningcss";
-import browserslist from "browserslist";
+
 import bun from "@wyattjoh/astro-bun-adapter";
+import { defineConfig } from "astro/config";
+import browserslist from "browserslist";
+import { browserslistToTargets } from "lightningcss";
 
 // https://astro.build/config
 export default defineConfig({

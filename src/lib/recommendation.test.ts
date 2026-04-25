@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { buildRequestPayload } from "./recommendation-provider";
 import { parseRecommendationJson } from "./recommendation";
+import { buildRequestPayload } from "./recommendation-provider";
 
 describe("parseRecommendationJson", () => {
 	test("parses fenced JSON", () => {

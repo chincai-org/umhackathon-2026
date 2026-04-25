@@ -111,9 +111,7 @@ export async function getRiskNews(
 			}
 
 			await new Promise((resolve) => setTimeout(resolve, 2000));
-		} catch {
-			continue;
-		}
+		} catch {}
 	}
 
 	return allArticles;
